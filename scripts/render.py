@@ -6,6 +6,7 @@ import sqlite3
 from typing import List
 
 import markdown2
+from bs4 import BeautifulSoup
 
 
 @dataclasses.dataclass
@@ -59,12 +60,12 @@ def main():
             'tables',
         ])
 
-    page_title = basename(args.output_file)
+    page = Page.from_markdown(body)
 
     html = f'''
         <html>
             <head>
-                <title>{page_title}</title>
+                <title>{page.index_title}</title>
                 <link rel="stylesheet" href="{args.output_relative_stylesheet_file}">
             </head>
             <body>
@@ -80,12 +81,43 @@ def main():
         args.index_file,
         [
             Entry(
-                name=page_title,
-                type='Guide',
+                name=page.index_title,
+                type=page.index_entry_type,
                 relative_path=args.documents_relative_output_path,
             ),
         ]
     )
+
+
+@dataclasses.dataclass
+class Page:
+    title_metadata: str
+    title_h1: str
+
+    @staticmethod
+    def from_markdown(body: markdown2.UnicodeWithAttrs) -> 'Page':
+        soup = BeautifulSoup(str(body), 'html5lib')
+
+        return Page(
+            title_metadata=body.metadata.get('page_title', '').strip('" '),
+            title_h1=soup.find_all('h1')[0].text if len(soup.find_all('h1')) > 0 else '',
+        )
+
+    @property
+    def index_title(self) -> str:
+        title = self.title_h1 or self.title_metadata or '???'
+
+        if self.index_entry_type == 'Function':
+            title = title.removesuffix(' Function')
+
+        return title
+
+    @property
+    def index_entry_type(self) -> str:
+        if self.title_metadata.endswith('Functions - Configuration Language'):
+            return 'Function'
+        else:
+            return 'Guide'
 
 
 @dataclasses.dataclass

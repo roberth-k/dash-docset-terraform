@@ -36,8 +36,8 @@ clean:
 clean/html:
 	rm -f .build/$(DOCSET_VERSION)/.done-make-html .build/$(DOCSET_VERSION)/Makefile
 	find $(DOCSET) -name '*.html' -delete
-	-rm $(DOCSET)/docSet.dsidx
-	-rm $(DOCSET)/optimizedIndex.dsidx
+	-rm $(DOCSET)/Contents/Resources/docSet.dsidx
+	-rm $(DOCSET)/Contents/Resources/optimizedIndex.dsidx
 
 ###
 
