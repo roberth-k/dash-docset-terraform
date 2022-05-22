@@ -1,5 +1,5 @@
 SHELL := /usr/bin/env bash
-export PATH := .venv/bin:$(PATH)
+export PATH := $(shell pwd)/scripts:$(shell pwd)/.venv/bin:$(PATH)
 
 DOCSET_VERSION := $(shell cat version/docset)
 
@@ -36,6 +36,8 @@ clean:
 clean/html:
 	rm -f .build/$(DOCSET_VERSION)/.done-make-html .build/$(DOCSET_VERSION)/Makefile
 	find $(DOCSET) -name '*.html' -delete
+	-rm $(DOCSET)/docSet.dsidx
+	-rm $(DOCSET)/optimizedIndex.dsidx
 
 ###
 
@@ -58,7 +60,7 @@ $(STATIC_FILES): $(DOCSET)/%:  static/%
 
 .build/$(DOCSET_VERSION)/Makefile: scripts/makefile.sh
 	@mkdir -p $(dir $@)
-	./scripts/makefile.sh $(dir $@)/src $(DOCSET)/Contents/Resources/Documents > $@
+	./scripts/makefile.sh $(dir $@)/src $(DOCSET) > $@
 
 .build/$(DOCSET_VERSION)/.done-make-html: .build/$(DOCSET_VERSION)/Makefile
 	@mkdir -p $(dir $@)
