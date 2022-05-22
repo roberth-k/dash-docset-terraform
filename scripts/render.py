@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import dataclasses
-from os.path import join, relpath, basename
+from os.path import join, relpath, basename, dirname
 import sqlite3
 from typing import List
 
@@ -13,6 +13,22 @@ class Args:
     input_file: str
     output_file: str
     docset_dir: str
+
+    @property
+    def index_file(self) -> str:
+        return join(self.docset_dir, 'Contents', 'Resources', 'docSet.dsidx')
+
+    @property
+    def documents_dir(self) -> str:
+        return join(self.docset_dir, 'Contents', 'Resources', 'Documents')
+
+    @property
+    def output_relative_stylesheet_file(self) -> str:
+        return join(relpath(self.documents_dir, dirname(self.output_file)), 'style.css')
+
+    @property
+    def documents_relative_output_path(self) -> str:
+        return relpath(self.output_file, self.documents_dir)
 
     @staticmethod
     def parse() -> 'Args':
@@ -43,9 +59,14 @@ def main():
             'tables',
         ])
 
+    page_title = basename(args.output_file)
+
     html = f'''
         <html>
-            <head></head>
+            <head>
+                <title>{page_title}</title>
+                <link rel="stylesheet" href="{args.output_relative_stylesheet_file}">
+            </head>
             <body>
                 {body}
             </body>
@@ -56,15 +77,12 @@ def main():
         fp.write(html)
 
     write_db(
-        join(args.docset_dir, 'Contents/Resources/docSet.dsidx'),
+        args.index_file,
         [
             Entry(
-                name=basename(args.output_file),
+                name=page_title,
                 type='Guide',
-                relative_path=relpath(
-                    args.output_file,
-                    join(args.docset_dir, 'Contents/Resources/Documents'),
-                ),
+                relative_path=args.documents_relative_output_path,
             ),
         ]
     )
