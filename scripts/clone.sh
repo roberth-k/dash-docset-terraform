@@ -18,7 +18,7 @@ function clone {
 
     1>&2 echo "cloning: $repo@$tag"
     mkdir -p $dir
-    git clone -q -c advice.detachedHead=false -b $tag $repo $dir
+    git clone -q -c advice.detachedHead=false -b $tag $repo $dir &
 }
 
 mkdir -p $dstdir/terraform
@@ -32,3 +32,5 @@ while read line; do
 
     clone $repo $tag $dstdir/providers/$name
 done < <( $SCRIPT_DIR/providers.py )
+
+wait
