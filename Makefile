@@ -12,17 +12,30 @@ STATIC_FILES := \
 
 ###
 
-.PHONY: venv clone static docset
+.PHONY: venv clone html static docset
 .DEFAULT_GOAL := docset
 
 venv: .venv/bin/activate .build/.done-requirements
 clone: .build/$(DOCSET_VERSION)/.done-cloning
+html: .build/$(DOCSET_VERSION)/.done-make-html
 static: $(STATIC_FILES)
 
 docset:
 	$(MAKE) venv
 	$(MAKE) clone
+	$(MAKE) html
 	$(MAKE) static
+
+###
+
+.PHONY: clean clean/html
+
+clean:
+	rm -rf .build
+
+clean/html:
+	rm -f .build/$(DOCSET_VERSION)/.done-make-html .build/$(DOCSET_VERSION)/Makefile
+	find $(DOCSET) -name '*.html' -delete
 
 ###
 
@@ -42,3 +55,12 @@ docset:
 $(STATIC_FILES): $(DOCSET)/%:  static/%
 	@mkdir -p $(dir $@)
 	cp $< $@
+
+.build/$(DOCSET_VERSION)/Makefile: scripts/makefile.sh
+	@mkdir -p $(dir $@)
+	./scripts/makefile.sh $(dir $@)/src $(DOCSET)/Contents/Resources/Documents > $@
+
+.build/$(DOCSET_VERSION)/.done-make-html: .build/$(DOCSET_VERSION)/Makefile
+	@mkdir -p $(dir $@)
+	$(MAKE) -C $(dir $@) html
+	@touch $@
