@@ -2,7 +2,7 @@
 import argparse
 import dataclasses
 import sqlite3
-from os.path import join, relpath, dirname
+from os.path import join, relpath, dirname, isdir
 from typing import List
 from urllib.parse import quote as url_quote
 
@@ -36,6 +36,10 @@ class Args:
     @property
     def provider_relative_output_file(self) -> str:
         return relpath(dirname(self.output_file), self.provider_dir)
+
+    @property
+    def output_relative_provider_dir(self) -> str:
+        return relpath(self.provider_dir, dirname(self.output_file))
 
     @staticmethod
     def parse() -> 'Args':
@@ -168,15 +172,26 @@ def update_hrefs(html: str, args: Args) -> str:
             path = a['href']
             fragment = ''
 
-        if not path.endswith('.html'):
-            path += '.html'
+        path = path.strip('/')
+
+        # Sometimes an absolute path such as /language/functions/chomp refers
+        # to /language/functions/chomp.html, and sometimes it refers to
+        # /langauge/functions/chomp/index.html. To determine which one it is,
+        # check if, in the input file tree, the path refers to a folder.
+
+        if isdir(join(dirname(args.input_file), args.output_relative_provider_dir, path)):
+            path = path + '/index.html'
+        else:
+            path = path + '.html'
 
         # At this point, we need to convert an absolute path (such as
         # /language/functions/chomp) into a path relative to the current
         # file (e.g. if the current file is /language/functions/trimspace,
         # the relative path to chomp is ../../language/functions/chomp).
 
-        path = join(relpath('.', args.provider_relative_output_file), path.lstrip('/'))
+        path = join(relpath('.', args.provider_relative_output_file), path)
+
+        # Reconstitute the full link.
 
         a['href'] = path + fragment
 
