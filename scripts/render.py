@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import argparse
 import dataclasses
-from os.path import join, relpath, basename, dirname
 import sqlite3
+from os.path import join, relpath, dirname
 from typing import List
+from urllib.parse import quote as url_quote
 
 import markdown2
 from bs4 import BeautifulSoup
@@ -62,17 +63,8 @@ def main():
 
     page = Page.from_markdown(body)
 
-    html = f'''
-        <html>
-            <head>
-                <title>{page.index_title}</title>
-                <link rel="stylesheet" href="{args.output_relative_stylesheet_file}">
-            </head>
-            <body>
-                {body}
-            </body>
-        </html>
-    '''
+    html = render_full_page(args, page)
+    html = add_section_anchors(html)
 
     with open(args.output_file, 'w') as fp:
         fp.write(html)
@@ -93,6 +85,7 @@ def main():
 class Page:
     title_metadata: str
     title_h1: str
+    body: str
 
     @staticmethod
     def from_markdown(body: markdown2.UnicodeWithAttrs) -> 'Page':
@@ -101,6 +94,7 @@ class Page:
         return Page(
             title_metadata=body.metadata.get('page_title', '').strip('" '),
             title_h1=soup.find_all('h1')[0].text if len(soup.find_all('h1')) > 0 else '',
+            body=str(body),
         )
 
     @property
@@ -118,6 +112,33 @@ class Page:
             return 'Function'
         else:
             return 'Guide'
+
+
+def render_full_page(args: Args, page: Page) -> str:
+    return f'''
+        <html>
+            <head>
+                <title>{page.index_title}</title>
+                <link rel="stylesheet" href="{args.output_relative_stylesheet_file}">
+            </head>
+            <body>
+                {page.body}
+            </body>
+        </html>
+    '''
+
+
+def add_section_anchors(html: str) -> str:
+    soup = BeautifulSoup(html, 'html5lib')
+
+    for tag_name in ['h2', 'h3', 'h4', 'h5', 'h6']:
+        for tag in soup.find_all(tag_name):
+            anchor = soup.new_tag('a')
+            anchor['name'] = '//apple_ref/cpp/Section/' + url_quote(tag.text)
+            anchor['class'] = ['dashAnchor']
+            tag.insert_before(anchor)
+
+    return str(soup)
 
 
 @dataclasses.dataclass
