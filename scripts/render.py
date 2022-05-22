@@ -15,6 +15,7 @@ class Args:
     input_file: str
     output_file: str
     docset_dir: str
+    provider_dir: str
 
     @property
     def index_file(self) -> str:
@@ -29,8 +30,12 @@ class Args:
         return join(relpath(self.documents_dir, dirname(self.output_file)), 'style.css')
 
     @property
-    def documents_relative_output_path(self) -> str:
+    def documents_relative_output_file(self) -> str:
         return relpath(self.output_file, self.documents_dir)
+
+    @property
+    def provider_relative_output_file(self) -> str:
+        return relpath(dirname(self.output_file), self.provider_dir)
 
     @staticmethod
     def parse() -> 'Args':
@@ -38,11 +43,13 @@ class Args:
         args.add_argument('--in', dest='input_file', required=True)
         args.add_argument('--out', dest='output_file', required=True)
         args.add_argument('--docset', dest='docset_dir', required=True)
+        args.add_argument('--provider', dest='provider_dir', required=True)
         args = args.parse_args()
         return Args(
             input_file=args.input_file,
             output_file=args.output_file,
             docset_dir=args.docset_dir,
+            provider_dir=args.provider_dir,
         )
 
 
@@ -65,6 +72,7 @@ def main():
 
     html = render_full_page(args, page)
     html = add_section_anchors(html)
+    html = update_hrefs(html, args)
 
     with open(args.output_file, 'w') as fp:
         fp.write(html)
@@ -75,7 +83,7 @@ def main():
             Entry(
                 name=page.index_title,
                 type=page.index_entry_type,
-                relative_path=args.documents_relative_output_path,
+                relative_path=args.documents_relative_output_file,
             ),
         ]
     )
@@ -137,6 +145,40 @@ def add_section_anchors(html: str) -> str:
             anchor['name'] = '//apple_ref/cpp/Section/' + url_quote(tag.text)
             anchor['class'] = ['dashAnchor']
             tag.insert_before(anchor)
+
+    return str(soup)
+
+
+def update_hrefs(html: str, args: Args) -> str:
+    soup = BeautifulSoup(html, 'html5lib')
+
+    for a in soup.find_all('a'):
+        if not a.get('href'):
+            continue
+
+        # No need to modify a relative path.
+        if not a['href'].startswith('/'):
+            continue
+
+        # (re-construct the full href at the end of the loop)
+        if '#' in a['href']:
+            path, fragment = a['href'].split('#', 1)
+            fragment = '#' + fragment
+        else:
+            path = a['href']
+            fragment = ''
+
+        if not path.endswith('.html'):
+            path += '.html'
+
+        # At this point, we need to convert an absolute path (such as
+        # /language/functions/chomp) into a path relative to the current
+        # file (e.g. if the current file is /language/functions/trimspace,
+        # the relative path to chomp is ../../language/functions/chomp).
+
+        path = join(relpath('.', args.provider_relative_output_file), path.lstrip('/'))
+
+        a['href'] = path + fragment
 
     return str(soup)
 
