@@ -23,8 +23,8 @@ static: $(STATIC_FILES)
 docset:
 	$(MAKE) venv
 	$(MAKE) clone
-	$(MAKE) html
 	$(MAKE) static
+	$(MAKE) html
 
 ###
 
@@ -34,7 +34,8 @@ clean:
 	rm -rf .build
 
 clean/html:
-	rm -f .build/$(DOCSET_VERSION)/.done-make-html .build/$(DOCSET_VERSION)/Makefile
+	-rm .build/$(DOCSET_VERSION)/.done-make-html
+	-rm .build/$(DOCSET_VERSION)/Makefile
 	find $(DOCSET) -name '*.html' -delete
 	-rm $(DOCSET)/Contents/Resources/docSet.dsidx
 	-rm $(DOCSET)/Contents/Resources/optimizedIndex.dsidx
