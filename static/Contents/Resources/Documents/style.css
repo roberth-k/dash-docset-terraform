@@ -3,10 +3,56 @@ html {
     line-height: 1.7;
 }
 
+a, a:visited {
+    text-decoration: none;
+    color: rgb(15, 79, 209);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 pre {
     padding: 8px 12px;
     line-height: 1.4rem;
     background: #f7f8fa;
     border: 1px solid #dce0e6;
     border-radius: 2px;
+}
+
+div.codehilite span {
+    color: #000000;
+}
+
+div.codehilite span.c1 {
+    color: #8e96a3;
+}
+
+div.codehilite span.na {
+    color: #525761;
+}
+
+div.codehilite span.nv,
+div.codehilite span.nc,
+div.codehilite span.s2,
+div.codehilite span.m,
+div.codehilite span.no {
+    color: #5c4ee5;
+}
+
+code {
+    background: #f7f8fa;
+    padding: 4px;
+    color: rgb(198, 42, 113);
+    border: 1px solid #dce0e6;
+    border-radius: 2px;
+}
+
+a code {
+    color: #0f4fd1;
+}
+
+pre code {
+    border: none;
+    color: #000000;
 }
