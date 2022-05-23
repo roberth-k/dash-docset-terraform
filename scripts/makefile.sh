@@ -11,7 +11,7 @@ function emit_terraform_rules {
     | while read -d $'\0' input_file
     do
         provider_dir="$dstdir/Contents/Resources/Documents/terraform"
-        emit_rule $terraform_docs_dir $input_file $provider_dir
+        emit_rule "terraform" $terraform_docs_dir $input_file $provider_dir
     done
 }
 
@@ -25,7 +25,7 @@ function emit_provider_rules {
         find "$provider_src/website/docs" -type f \( -name '*.md' -or -name '*.markdown' \) -print0 \
         | while read -d $'\0' input_file
         do
-            emit_rule "$provider_src/website/docs" $input_file $provider_dir
+            emit_rule "provider" "$provider_src/website/docs" $input_file $provider_dir
         done
     elif [[ -d "$provider_src/docs" ]]; then
         # tfproviderdocs style
@@ -35,7 +35,7 @@ function emit_provider_rules {
         find "$provider_src/docs" -type f \( -name '*.md' -or -name '*.markdown' \) -print0 \
         | while read -d $'\0' input_file
         do
-            emit_rule "$provider_src/docs" $input_file $provider_dir
+            emit_rule "provider" "$provider_src/docs" $input_file $provider_dir
         done
     else
         1>&2 echo "provider $provider_src has an unknown structure"
@@ -44,13 +44,15 @@ function emit_provider_rules {
 }
 
 function emit_rule {
-    local input_dir=$1
-    local input_file=$2
-    local provider_dir=$3
+    local flavor=$1
+    local input_dir=$2
+    local input_file=$3
+    local provider_dir=$4
+
     local reldir=$(realpath -m --relative-to $input_dir $(dirname $input_file))
     local barename=$(basename "$input_file" | cut -d. -f1)
-    local output_file
 
+    local output_file
     case $(realpath --relative-to $input_dir $(dirname $input_file)) in
         r|resource|resources)
             output_file="$provider_dir/resources/$barename.html"
@@ -68,11 +70,10 @@ function emit_rule {
 
     cat <<EOF
 
-TARGET := $(pwd)/$output_file
-TARGETS += \$(TARGET)
-\$(TARGET): $(pwd)/$input_file
+TARGETS += $(pwd)/$output_file
+$(pwd)/$output_file: $(pwd)/$input_file
 	@mkdir -p \$(dir \$@)
-	render.py --in \$< --out \$@ --docset $(realpath -m $dstdir) --provider $(realpath -m $provider_dir)
+	render.py --in \$< --out \$@ --docset $(realpath -m $dstdir) --provider $(realpath -m $provider_dir) --flavor $flavor
 EOF
 }
 

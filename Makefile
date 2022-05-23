@@ -25,6 +25,7 @@ docset:
 	$(MAKE) clone
 	$(MAKE) static
 	$(MAKE) html
+	$(MAKE) tgz
 
 ###
 
@@ -67,3 +68,7 @@ $(STATIC_FILES): $(DOCSET)/%:  static/%
 	@mkdir -p $(dir $@)
 	$(MAKE) -C $(dir $@) html
 	@touch $@
+
+.build/$(DOCSET_VERSION)/Terraform.tgz: .build/$(DOCSET_VERSION)/.done-make-html
+	cd $(dir $@) \
+	&& tar --exclude='.DS_Store' -czf $(notdir $@) $(patsubst %.tgz,%.docset,$(notdir $@))

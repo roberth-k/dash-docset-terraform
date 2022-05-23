@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import argparse
 import dataclasses
+import re
 import sqlite3
-from os.path import join, relpath, dirname, isdir
-from typing import List
+from os.path import join, relpath, dirname, isdir, basename
+from typing import List, Optional
 from urllib.parse import quote as url_quote
 
 import markdown2
@@ -16,6 +17,7 @@ class Args:
     output_file: str
     docset_dir: str
     provider_dir: str
+    flavor: str
 
     @property
     def index_file(self) -> str:
@@ -48,12 +50,14 @@ class Args:
         args.add_argument('--out', dest='output_file', required=True)
         args.add_argument('--docset', dest='docset_dir', required=True)
         args.add_argument('--provider', dest='provider_dir', required=True)
+        args.add_argument('--flavor', dest='flavor', choices=['terraform', 'provider'], required=True)
         args = args.parse_args()
         return Args(
             input_file=args.input_file,
             output_file=args.output_file,
             docset_dir=args.docset_dir,
             provider_dir=args.provider_dir,
+            flavor=args.flavor,
         )
 
 
@@ -63,16 +67,19 @@ def main():
     with open(args.input_file, 'r') as fp:
         input_data = fp.read()
 
-    body = markdown2.markdown(
-        text=input_data,
-        extras=[
-            'fenced-code-blocks',
-            'header-ids',
-            'metadata',
-            'tables',
-        ])
+    markdown_extras = [
+        'fenced-code-blocks',
+        'header-ids',
+        'metadata',
+        'tables',
+    ]
 
-    page = Page.from_markdown(body)
+    if args.flavor == 'provider':
+        markdown_extras.append('code-friendly')
+
+    body = markdown2.markdown(text=input_data, extras=markdown_extras)
+
+    page = Page.from_markdown(body=body, args=args)
 
     html = render_full_page(args, page)
     html = add_section_anchors(html)
@@ -98,19 +105,31 @@ class Page:
     title_metadata: str
     title_h1: str
     body: str
+    flavor: str
+    output_file: str
 
     @staticmethod
-    def from_markdown(body: markdown2.UnicodeWithAttrs) -> 'Page':
+    def from_markdown(body: markdown2.UnicodeWithAttrs, args: Args) -> 'Page':
         soup = BeautifulSoup(str(body), 'html5lib')
 
         return Page(
             title_metadata=body.metadata.get('page_title', '').strip('" '),
             title_h1=soup.find_all('h1')[0].text if len(soup.find_all('h1')) > 0 else '',
             body=str(body),
+            output_file=args.output_file,
+            flavor=args.flavor,
         )
 
     @property
     def index_title(self) -> str:
+        if self.is_data_source or self.is_resource:
+            resource_name = derive_resource_name(self.title_metadata, self.title_h1)
+
+            if not resource_name:
+                raise RuntimeError('failed to derive resource name')
+
+            return resource_name
+
         title = self.title_h1 or self.title_metadata or '???'
 
         if self.index_entry_type == 'Function':
@@ -122,8 +141,20 @@ class Page:
     def index_entry_type(self) -> str:
         if self.title_metadata.endswith('Functions - Configuration Language'):
             return 'Function'
+        elif self.is_data_source:
+            return 'Directive'
+        elif self.is_resource:
+            return 'Resource'
         else:
             return 'Guide'
+
+    @property
+    def is_resource(self) -> bool:
+        return self.flavor == 'provider' and basename(dirname(self.output_file)) == 'resources'
+
+    @property
+    def is_data_source(self) -> bool:
+        return self.flavor == 'provider' and basename(dirname(self.output_file)) == 'data-sources'
 
 
 def render_full_page(args: Args, page: Page) -> str:
@@ -196,6 +227,35 @@ def update_hrefs(html: str, args: Args) -> str:
         a['href'] = path + fragment
 
     return str(soup)
+
+
+def derive_resource_name(metadata_page_title: str, page_h1: str) -> Optional[str]:
+    metadata_page_title = metadata_page_title.strip()
+    page_h1 = page_h1.strip()
+
+    hardcoded = [
+        (metadata_page_title, r'^External (?:Data Source|Resource)$', 'external'),
+        (metadata_page_title, r'^HTTP Data Source$', 'http'),
+    ]
+
+    for text, pattern, resource_name in hardcoded:
+        if re.match(pattern, text):
+            return resource_name
+
+    combinations = [
+        (metadata_page_title, r'^[^:]+\: ([a-z0-9][a-z0-9_]+)(?: [Rr]esource| [Dd]ata [Ss]ource)?$'),
+        (metadata_page_title, r'^([a-z0-9][a-z0-9_]+) (?:Resource|Data Source) \- terraform\-provider\-[a-z-]+$'),
+        (metadata_page_title, r'^(?:Resource|Data Source) ([a-z0-9][a-z0-9_]+) \- terraform\-provider\-[a-z-]+$'),
+        (page_h1, r'^(?:Resource|Data Source)\: ([a-z0-9][a-z0-9_]+)$'),
+        (page_h1, r'^([a-z0-9][a-z0-9_]+)$'),
+    ]
+
+    for text, pattern in combinations:
+        results = re.findall(pattern, text)
+        if results:
+            return results[0]
+
+    return None
 
 
 @dataclasses.dataclass
