@@ -1,5 +1,6 @@
-SHELL := /usr/bin/env bash
-export PATH := $(shell pwd)/scripts:$(shell pwd)/.venv/bin:$(PATH)
+SHELL 			:= /usr/bin/env bash
+.DEFAULT_GOAL 	:= docset
+export PATH 	:= $(shell pwd)/scripts:$(shell pwd)/.venv/bin:$(PATH)
 
 DOCSET_VERSION := $(shell cat version/docset)
 
@@ -12,16 +13,24 @@ STATIC_FILES := \
 
 ###
 
-.PHONY: venv clone html static docset
-.DEFAULT_GOAL := docset
+.PHONY: test/unit
+
+test/unit: venv
+	python3 -m unittest discover ./scripts
+
+###
+
+.PHONY: venv clone html static tgz docset
 
 venv: .venv/bin/activate .build/.done-requirements
 clone: .build/$(DOCSET_VERSION)/.done-cloning
 html: .build/$(DOCSET_VERSION)/.done-make-html
+tgz: .build/$(DOCSET_VERSION)/Terraform.tgz
 static: $(STATIC_FILES)
 
 docset:
 	$(MAKE) venv
+	$(MAKE) test/unit
 	$(MAKE) clone
 	$(MAKE) static
 	$(MAKE) html
@@ -29,17 +38,16 @@ docset:
 
 ###
 
-.PHONY: clean clean/html
+.PHONY: clean/src clean
+
+clean/src:
+	-rm -rf .build/$(DOCSET_VERSION)/src
 
 clean:
-	rm -rf .build
-
-clean/html:
 	-rm .build/$(DOCSET_VERSION)/.done-make-html
 	-rm .build/$(DOCSET_VERSION)/Makefile
-	find $(DOCSET) -name '*.html' -delete
-	-rm $(DOCSET)/Contents/Resources/docSet.dsidx
-	-rm $(DOCSET)/Contents/Resources/optimizedIndex.dsidx
+	-rm -r $(DOCSET)
+	-rm .build/$(DOCSET_VERSION)/Terraform.tgz
 
 ###
 
