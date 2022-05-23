@@ -78,15 +78,19 @@ EOF
 
 echo "TARGETS :="
 
-emit_terraform_rules &
+emit_terraform_rules
 
 find "$srcdir/providers" -type d -mindepth 2 -maxdepth 2 -print0 \
 | while read -d $'\0' provider_src
 do
-    emit_provider_rules $provider_src &
+    emit_provider_rules $provider_src
 done
 
-wait
+# TODO
+# The emit_ functions used to run in the background, and there used to be
+# a wait here. But this resulted in a Makefile that didn't have the final
+# html: rule, for example. Parallelism of the finds is preferred, so have
+# to figure out what was going on here.
 
 echo ""
 echo "html: \$(TARGETS)"
