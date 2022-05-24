@@ -77,7 +77,7 @@ def main():
     if args.flavor == 'provider':
         markdown_extras.append('code-friendly')
 
-    body = markdown2.markdown(text=input_data, extras=markdown_extras)
+    body = render_markdown(text=input_data, extras=markdown_extras)
 
     page = Page.from_markdown(body=body, args=args)
 
@@ -98,6 +98,16 @@ def main():
             ),
         ]
     )
+
+
+def render_markdown(text: str, extras: List[str]) -> markdown2.UnicodeWithAttrs:
+    # Leading whitespace can mess with metadata, so ensure there isn't any.
+    text = text.strip()
+
+    # Pygments doesn't recognise ```hcl.
+    text = text.replace('```hcl', '```terraform')
+
+    return markdown2.markdown(text=text, extras=extras)
 
 
 @dataclasses.dataclass
@@ -202,6 +212,11 @@ def update_hrefs(html: str, args: Args) -> str:
         else:
             path = a['href']
             fragment = ''
+
+        if args.flavor == 'provider' and path.startswith('/docs/providers/'):
+            path = path.replace('/r/', '/resources/')
+            path = path.replace('/d/', '/data-sources/')
+            path = join(args.output_relative_provider_dir, path.split('/', 4)[-1])
 
         path = path.strip('/')
 
