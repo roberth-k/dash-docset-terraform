@@ -1,0 +1,16 @@
+name: docset
+
+on:
+  - push
+
+jobs:
+  build_docset:
+    name: Build and Release Docset
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - run: 'make test'
+      - run: 'make -j$(( $(nproc) + 1 ))'
