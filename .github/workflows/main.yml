@@ -14,3 +14,7 @@ jobs:
           python-version: '3.9'
       - run: 'make test/unit'
       - run: 'make -j$(( $(nproc) + 1 ))'
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Terraform.tgz
+          path: .build/1.2.0.220522/Terraform.tgz
