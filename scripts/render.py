@@ -216,7 +216,7 @@ def update_hrefs(html: str, args: Args) -> str:
         if args.flavor == 'provider' and path.startswith('/docs/providers/'):
             path = path.replace('/r/', '/resources/')
             path = path.replace('/d/', '/data-sources/')
-            path = join(args.output_relative_provider_dir, path.split('/', 4)[-1])
+            path = path.split('/', 4)[-1]
 
         path = path.strip('/')
 
@@ -227,7 +227,7 @@ def update_hrefs(html: str, args: Args) -> str:
 
         if isdir(join(dirname(args.input_file), args.output_relative_provider_dir, path)):
             path = path + '/index.html'
-        else:
+        elif not path.endswith('.html'):
             path = path + '.html'
 
         # At this point, we need to convert an absolute path (such as
