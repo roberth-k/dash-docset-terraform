@@ -38,7 +38,10 @@ docset:
 
 ###
 
-.PHONY: clean/src clean
+.PHONY: clean/all clean/src clean
+
+clean/all:
+	-rm -rf .build
 
 clean/src:
 	-rm -rf .build/$(DOCSET_VERSION)/src
