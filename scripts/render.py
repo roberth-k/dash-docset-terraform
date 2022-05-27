@@ -67,17 +67,7 @@ def main():
     with open(args.input_file, 'r') as fp:
         input_data = fp.read()
 
-    markdown_extras = [
-        'fenced-code-blocks',
-        'header-ids',
-        'metadata',
-        'tables',
-    ]
-
-    if args.flavor == 'provider':
-        markdown_extras.append('code-friendly')
-
-    body = render_markdown(text=input_data, extras=markdown_extras)
+    body = render_markdown(text=input_data, flavor=args.flavor)
 
     page = Page.from_markdown(body=body, args=args)
 
@@ -100,14 +90,27 @@ def main():
     )
 
 
-def render_markdown(text: str, extras: List[str]) -> markdown2.UnicodeWithAttrs:
+def render_markdown(text: str, flavor: str) -> markdown2.UnicodeWithAttrs:
     # Leading whitespace can mess with metadata, so ensure there isn't any.
     text = text.strip()
 
     # Pygments doesn't recognise ```hcl.
     text = text.replace('```hcl', '```terraform')
 
-    return markdown2.markdown(text=text, extras=extras)
+    extras = ['fenced-code-blocks', 'header-ids', 'tables']
+
+    if flavor == 'provider':
+        extras.append('code-friendly')
+
+    if text.startswith('---'):
+        extras.append('metadata')
+
+    md = markdown2.markdown(text=text, extras=extras)
+
+    if not hasattr(md, 'metadata') or not md.metadata:
+        md.metadata = {}
+
+    return md
 
 
 @dataclasses.dataclass

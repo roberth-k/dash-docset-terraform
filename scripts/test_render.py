@@ -20,6 +20,7 @@ class TestDeriveResourceName(ut.TestCase):
             ('http', 'HTTP Data Source', 'http Data Source'),
             ('vault_transit_encrypt', 'Vault: vault_transit_encrypt data source', 'vault_transit_encrypt'),
             ('vsphere_role', 'VMware vSphere: Role', 'vsphere_role'),
+            ('splunk_data_ui_views', '', 'Resource: splunk_data_ui_views'),
         ]
 
         for expect, metadata, title in test_cases:
