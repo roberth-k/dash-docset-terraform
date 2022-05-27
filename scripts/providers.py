@@ -4,44 +4,68 @@ from typing import Tuple
 import requests
 
 REGISTRY_URL = 'https://registry.terraform.io'
+
 EXCLUDED_PROVIDERS = [
     'hashicorp/google-beta',
     'hashicorp/kubernetes-alpha',
 ]
 
+PROVIDER_FILTERS = [
+    'hashicorp',
+    'cloudflare/cloudflare',
+    'digitalocean/digitalocean',
+    'fastly/fastly',
+    'heroku/heroku',
+    'PagerDuty/pagerduty',
+    'splunk/splunk',
+    'splunk/victorops',
+]
+
 
 def main():
-    page_number = '1'
-    results = []
+    namespaces = [x.split('/')[0] for x in PROVIDER_FILTERS]
 
-    while page_number:
-        response = requests.get(
-            url=REGISTRY_URL+'/v2/providers',
-            params={
-                'filter[namespace]': 'hashicorp',
+    for provider_filter in PROVIDER_FILTERS:
+        if '/' in provider_filter:
+            namespace, name = provider_filter.split('/')
+        else:
+            namespace = provider_filter
+            name = ''
+
+        page_number = '1'
+
+        while page_number:
+            params = {
+                'filter[namespace]': namespace,
                 'filter[moved]': 'false',
                 'filter[unlisted]': 'false',
                 'filter[without-versions]': 'false',
                 'page[size]': '50',
                 'page[number]': page_number,
-            })
+            }
 
-        response.raise_for_status()
+            response = requests.get(
+                url=REGISTRY_URL+'/v2/providers',
+                params=params)
 
-        data = response.json()
-        results.extend(data['data'])
-        page_number = data['meta']['pagination']['next-page']
+            response.raise_for_status()
 
-    for datum in data['data']:
-        source = datum['attributes']['source']
-        full_name = datum['attributes']['full-name']
-        link = datum['links']['self']
+            data = response.json()
+            page_number = data['meta']['pagination']['next-page']
 
-        if full_name in EXCLUDED_PROVIDERS:
-            continue
+        for datum in data['data']:
+            source = datum['attributes']['source']
+            full_name = datum['attributes']['full-name']
+            link = datum['links']['self']
 
-        latest_version, latest_version_tag = get_latest_version_tag(link)
-        print(f'{full_name} {source} {latest_version_tag}')
+            if full_name in EXCLUDED_PROVIDERS:
+                continue
+
+            if name and full_name != provider_filter:
+                continue
+
+            latest_version, latest_version_tag = get_latest_version_tag(link)
+            print(f'{full_name} {source} {latest_version_tag}')
 
 
 def get_latest_version_tag(link: str) -> Tuple[str, str]:
