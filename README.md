@@ -35,5 +35,5 @@ make docset
 The build will use the version of Terraform given in [version/terraform]. All
 providers will use their latest versions.
 
-The docset will be available at `.build/(version)/Terraform.docset`, along with a
-compressed variant at `.build/(version)/Terraform.tgz`.
+The docset will be available at `.build/latest/Terraform.docset`, along with a
+compressed variant at `.build/latest/Terraform.tgz`.

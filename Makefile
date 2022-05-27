@@ -25,7 +25,7 @@ test/unit: venv
 venv: .venv/bin/activate .build/.done-requirements
 clone: .build/$(DOCSET_VERSION)/.done-cloning
 html: .build/$(DOCSET_VERSION)/.done-make-html
-tgz: .build/$(DOCSET_VERSION)/Terraform.tgz
+tgz: .build/latest/Terraform.tgz
 static: $(STATIC_FILES)
 
 docset:
@@ -83,3 +83,7 @@ $(STATIC_FILES): $(DOCSET)/%:  static/%
 .build/$(DOCSET_VERSION)/Terraform.tgz: .build/$(DOCSET_VERSION)/.done-make-html
 	cd $(dir $@) \
 	&& tar --exclude='.DS_Store' -czf $(notdir $@) $(patsubst %.tgz,%.docset,$(notdir $@))
+
+.build/latest/%: .build/$(DOCSET_VERSION)/%
+	@mkdir -p $(dir $@)
+	cp $< $@
