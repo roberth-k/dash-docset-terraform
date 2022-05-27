@@ -171,8 +171,31 @@ class Page:
 
 
 def render_full_page(args: Args, page: Page) -> str:
+    if args.flavor == 'terraform':
+        relative_path = relpath(args.output_file, args.provider_dir)
+    elif args.flavor == 'provider':
+        relative_path = relpath(args.output_file, args.documents_dir)
+    else:
+        raise RuntimeError(f'unknown flavor: {args.flavor}')
+
+    path_splits = relative_path.split('#', 1)
+
+    if path_splits[0].endswith('/index.html'):
+        path_splits[0] = path_splits[0].removesuffix('/index.html')
+    else:
+        path_splits[0] = path_splits[0].removesuffix('.html')
+
+    relative_path = '#'.join(path_splits)
+
+    if args.flavor == 'terraform':
+        full_url = 'https://www.terraform.io/' + relative_path
+    elif args.flavor == 'provider':
+        full_url = 'https://registry.terraform.io/' + relative_path
+    else:
+        raise RuntimeError(f'unknown flavor: {args.flavor}')
+
     return f'''
-        <html>
+        <html><!-- Online page at {full_url} -->
             <head>
                 <title>{page.index_title}</title>
                 <link rel="stylesheet" href="{args.output_relative_stylesheet_file}">

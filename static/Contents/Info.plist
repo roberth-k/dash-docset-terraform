@@ -18,7 +18,7 @@
 	<string>dashtoc</string>
 
 	<key>DashDocSetFallbackURL</key>
-	<string>http://example.com</string>
+	<string>https://terraform.io</string>
 
 	<key>isDashDocset</key>
 	<true/>
