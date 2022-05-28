@@ -46,6 +46,8 @@ code {
     color: rgb(198, 42, 113);
     border: 1px solid #dce0e6;
     border-radius: 2px;
+    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 12px;
 }
 
 a code {
