@@ -97,6 +97,8 @@ def render_markdown(text: str, flavor: str) -> markdown2.UnicodeWithAttrs:
     # Pygments doesn't recognise ```hcl.
     text = text.replace('```hcl', '```terraform')
 
+    text = wrap_blocks(text)
+
     extras = ['fenced-code-blocks', 'header-ids', 'tables']
 
     if flavor == 'provider':
@@ -297,6 +299,24 @@ def derive_resource_name(metadata_page_title: str, page_h1: str) -> Optional[str
             return results[0]
 
     return None
+
+
+def wrap_blocks(markdown: str) -> str:
+    combinations = [
+        ('->', 'note'),
+        ('~>', 'warning'),
+    ]
+
+    for prefix, kind in combinations:
+        pattern = r'(' + re.escape(prefix) + r'\s*\*\*([^*]+)\*\*(.*?[\n])[\n])'
+
+        markdown = re.sub(
+            pattern=pattern,
+            repl=f'<div class="alert alert-{kind}"><div class="alert-title">\n\\2\n</div>\n\\3\n</div>\n\n',
+            string=markdown,
+            flags=re.DOTALL)
+
+    return markdown
 
 
 @dataclasses.dataclass
