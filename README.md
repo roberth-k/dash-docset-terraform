@@ -32,7 +32,7 @@ To build the docset, run:
 make docset
 ```
 
-The build will use the version of Terraform given in [version/terraform]. All
+The build will use the version of Terraform given in [version/terraform](version/terraform). All
 providers will use their latest versions.
 
 The docset will be available at `.build/latest/Terraform.docset`, along with a
