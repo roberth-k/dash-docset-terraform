@@ -122,6 +122,7 @@ class Page:
     body: str
     flavor: str
     output_file: str
+    is_provider_index: bool
 
     @staticmethod
     def from_markdown(body: markdown2.UnicodeWithAttrs, args: Args) -> 'Page':
@@ -133,35 +134,53 @@ class Page:
             body=str(body),
             output_file=args.output_file,
             flavor=args.flavor,
+            is_provider_index=args.provider_relative_output_file == 'index.html' or args.provider_relative_output_file == '.',
         )
 
     @property
     def index_title(self) -> str:
-        if self.is_data_source or self.is_resource:
-            resource_name = derive_resource_name(self.title_metadata, self.title_h1)
-
-            if not resource_name:
-                raise RuntimeError('failed to derive resource name')
-
-            return resource_name
-
         title = self.title_h1 or self.title_metadata or '???'
 
-        if self.index_entry_type == 'Function':
-            title = title.removesuffix(' Function')
+        if self.flavor == 'terraform':
+            if self.index_entry_type == 'Function':
+                return title.removesuffix(' Function')
+            elif self.index_entry_type == 'Command':
+                return title.removeprefix('Command: ')
+            else:
+                return title
+        elif self.flavor == 'provider':
+            if self.is_data_source or self.is_resource:
+                resource_name = derive_resource_name(self.title_metadata, self.title_h1)
 
-        return title
+                if not resource_name:
+                    raise RuntimeError('failed to derive resource name')
+
+                return resource_name
+            else:
+                return title
+        else:
+            raise RuntimeError(f'unknown flavor: {self.flavor}')
 
     @property
     def index_entry_type(self) -> str:
-        if self.title_metadata.endswith('Functions - Configuration Language'):
-            return 'Function'
-        elif self.is_data_source:
-            return 'Directive'
-        elif self.is_resource:
-            return 'Resource'
+        if self.flavor == 'terraform':
+            if self.title_metadata.endswith('Functions - Configuration Language'):
+                return 'Function'
+            elif self.title_metadata.startswith('Command: '):
+                return 'Command'
+            else:
+                return 'Guide'
+        elif self.flavor == 'provider':
+            if self.is_provider_index:
+                return 'Provider'
+            elif self.is_data_source:
+                return 'Directive'
+            elif self.is_resource:
+                return 'Resource'
+            else:
+                return 'Guide'
         else:
-            return 'Guide'
+            raise RuntimeError(f'unknown flavor: {self.flavor}')
 
     @property
     def is_resource(self) -> bool:
@@ -312,7 +331,7 @@ def wrap_blocks(markdown: str) -> str:
 
         markdown = re.sub(
             pattern=pattern,
-            repl=f'<div class="alert alert-{kind}"><div class="alert-title">\n\\2\n</div>\n\\3\n</div>\n\n',
+            repl=f'<div class="alert alert-{kind}"><div class="alert-title">\n\\2\n</div>\n\\3</div>\n\n',
             string=markdown,
             flags=re.DOTALL)
 
