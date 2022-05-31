@@ -128,7 +128,7 @@ class Page:
         soup = BeautifulSoup(str(body), 'html5lib')
 
         return Page(
-            title_metadata=body.metadata.get('page_title', '').strip('" '),
+            title_metadata=body.metadata.get('page_title', '').strip('"\' '),
             title_h1=soup.find_all('h1')[0].text if len(soup.find_all('h1')) > 0 else '',
             body=str(body),
             output_file=args.output_file,
