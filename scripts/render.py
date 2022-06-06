@@ -174,7 +174,7 @@ class Page:
             if self.is_provider_index:
                 return 'Provider'
             elif self.is_data_source:
-                return 'Directive'
+                return 'Data Source'
             elif self.is_resource:
                 return 'Resource'
             else:
