@@ -97,7 +97,8 @@ def render_markdown(text: str, flavor: str) -> markdown2.UnicodeWithAttrs:
     # Pygments doesn't recognise ```hcl.
     text = text.replace('```hcl', '```terraform')
 
-    text = wrap_blocks(text)
+    # todo: wrapping the blocks causes issues with list rendering
+    # text = wrap_blocks(text)
 
     extras = ['fenced-code-blocks', 'header-ids', 'tables']
 
@@ -331,7 +332,7 @@ def wrap_blocks(markdown: str) -> str:
 
         markdown = re.sub(
             pattern=pattern,
-            repl=f'<div class="alert alert-{kind}"><div class="alert-title">\n\\2\n</div>\n\\3</div>\n\n',
+            repl=f'<div class="alert alert-{kind}"><div class="alert-title">\n\\2\n</div>\\3</div>\n\n',
             string=markdown,
             flags=re.DOTALL)
 
