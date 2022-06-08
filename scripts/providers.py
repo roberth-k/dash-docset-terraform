@@ -25,8 +25,6 @@ PROVIDER_FILTERS = [
 
 
 def main():
-    namespaces = [x.split('/')[0] for x in PROVIDER_FILTERS]
-
     for provider_filter in PROVIDER_FILTERS:
         if '/' in provider_filter:
             namespace, name = provider_filter.split('/')
@@ -39,11 +37,11 @@ def main():
         while page_number:
             params = {
                 'filter[namespace]': namespace,
-                'filter[moved]': 'false',
-                'filter[unlisted]': 'false',
-                'filter[without-versions]': 'false',
+                'filter[moved]': 'true',
+                'filter[unlisted]': 'true',
+                'filter[without-versions]': 'true',
                 'page[size]': '50',
-                'page[number]': page_number,
+                'page[number]': str(page_number),
             }
 
             response = requests.get(
@@ -72,7 +70,7 @@ def main():
 
 def get_latest_version_tag(link: str) -> Tuple[str, str]:
     response = requests.get(
-        url=REGISTRY_URL+'/'+link,
+        url=REGISTRY_URL+'/'+link.lstrip('/'),
         params={
             'include': 'provider-versions',
         })
