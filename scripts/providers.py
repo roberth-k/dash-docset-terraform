@@ -37,9 +37,9 @@ def main():
         while page_number:
             params = {
                 'filter[namespace]': namespace,
-                'filter[moved]': 'true',
-                'filter[unlisted]': 'true',
-                'filter[without-versions]': 'true',
+                'filter[moved]': 'false',
+                'filter[unlisted]': 'false',
+                'filter[without-versions]': 'false',
                 'page[size]': '50',
                 'page[number]': str(page_number),
             }
