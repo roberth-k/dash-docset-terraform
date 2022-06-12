@@ -88,3 +88,8 @@ div.alert-warning > div.alert-title {
 div.codehilite code {
     padding: 0;
 }
+
+div.alert p {
+    padding: 0;
+    margin: 0;
+}
