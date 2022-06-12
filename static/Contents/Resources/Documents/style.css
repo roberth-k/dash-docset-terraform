@@ -84,3 +84,7 @@ div.alert-warning {
 div.alert-warning > div.alert-title {
     color: rgb(160, 125, 2);
 }
+
+div.codehilite code {
+    padding: 0;
+}
