@@ -97,6 +97,8 @@ def render_markdown(text: str, flavor: str) -> markdown2.UnicodeWithAttrs:
     # Pygments doesn't recognise ```hcl.
     text = text.replace('```hcl', '```terraform')
 
+    text = wrap_content_in_markdown_div(text)
+
     text = wrap_blocks(text)
 
     extras = [
@@ -323,6 +325,28 @@ def derive_resource_name(metadata_page_title: str, page_h1: str) -> Optional[str
             return results[0]
 
     return None
+
+
+def wrap_content_in_markdown_div(markdown: str) -> str:
+    """
+    Wraps the content (excluding optional metadata at the top of a .md file)
+    in a <div markdown="1">, as otherwise embedded html will cause the renderer
+    to start skipping markdown syntax.
+    """
+
+    # Assume that if a metadata block exists, it's at the start of the markdown
+    # and bounded by triple dashes on individual lines.
+
+    if markdown.startswith('---'):
+        lines = markdown.splitlines()
+        metadata_end_index = lines.index('---', 1)
+        lines.insert(metadata_end_index + 1, '<div markdown="1">')
+        lines.append('</div>')
+        markdown = '\n'.join(lines)
+    else:
+        markdown = f'<div markdown="1">\n{markdown}\n</div>\n'
+
+    return markdown
 
 
 def wrap_blocks(markdown: str) -> str:
