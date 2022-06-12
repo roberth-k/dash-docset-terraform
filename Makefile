@@ -30,7 +30,6 @@ static: $(STATIC_FILES)
 
 docset:
 	$(MAKE) venv
-	$(MAKE) test/unit
 	$(MAKE) clone
 	$(MAKE) static
 	$(MAKE) html
