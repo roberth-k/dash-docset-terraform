@@ -97,10 +97,14 @@ def render_markdown(text: str, flavor: str) -> markdown2.UnicodeWithAttrs:
     # Pygments doesn't recognise ```hcl.
     text = text.replace('```hcl', '```terraform')
 
-    # todo: wrapping the blocks causes issues with list rendering
-    # text = wrap_blocks(text)
+    text = wrap_blocks(text)
 
-    extras = ['fenced-code-blocks', 'header-ids', 'tables']
+    extras = [
+        'fenced-code-blocks',
+        'header-ids',
+        'markdown-in-html',
+        'tables',
+    ]
 
     if flavor == 'provider':
         extras.append('code-friendly')
@@ -327,12 +331,29 @@ def wrap_blocks(markdown: str) -> str:
         ('~>', 'warning'),
     ]
 
+    def repl(match):
+        if match.group(1):
+            title = match.group(1).strip().strip('*')
+        else:
+            title = None
+
+        body = match.group(2).strip()
+
+        text = f'<div class="alert alert-{kind}" markdown="1">\n'
+
+        if title:
+            text += f'<div class="alert-title" markdown="1">\n{title}\n</div>\n'
+
+        text += f'{body}\n</div>\n\n'
+
+        return text
+
     for prefix, kind in combinations:
-        pattern = r'(' + re.escape(prefix) + r'\s*\*\*([^*]+)\*\*(.*?[\n])[\n])'
+        pattern = re.escape(prefix) + r'\s*(\*\*[^*]+\*\*)?(.*?[\n])[\n]'
 
         markdown = re.sub(
             pattern=pattern,
-            repl=f'<div class="alert alert-{kind}"><div class="alert-title">\n\\2\n</div>\\3</div>\n\n',
+            repl=repl,
             string=markdown,
             flags=re.DOTALL)
 
