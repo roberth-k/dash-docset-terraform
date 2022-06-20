@@ -33,6 +33,7 @@ docset:
 	$(MAKE) clone
 	$(MAKE) static
 	$(MAKE) html
+	$(MAKE) .build/latest/Terraform.docset
 	$(MAKE) tgz
 
 ###
@@ -85,4 +86,4 @@ $(STATIC_FILES): $(DOCSET)/%:  static/%
 
 .build/latest/%: .build/$(DOCSET_VERSION)/%
 	@mkdir -p $(dir $@)
-	cp $< $@
+	cp -r $< $@
