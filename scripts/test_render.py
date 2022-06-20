@@ -21,6 +21,7 @@ class TestDeriveResourceName(ut.TestCase):
             ('vault_transit_encrypt', 'Vault: vault_transit_encrypt data source', 'vault_transit_encrypt'),
             ('vsphere_role', 'VMware vSphere: Role', 'vsphere_role'),
             ('splunk_data_ui_views', '', 'Resource: splunk_data_ui_views'),
+            ('cloudflare_access_application', 'cloudflare_access_application Resource - Cloudflare', 'cloudflare_access_application (Resource)'),
         ]
 
         for expect, metadata, title in test_cases:

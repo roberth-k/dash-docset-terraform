@@ -317,6 +317,7 @@ def derive_resource_name(metadata_page_title: str, page_h1: str) -> Optional[str
         (metadata_page_title, r'^(?:Resource|Data Source) ([a-z0-9][a-z0-9_]+) \- terraform\-provider\-[a-z-]+$'),
         (page_h1, r'^(?:Resource|Data Source)\: ([a-z0-9][a-z0-9_]+)$'),
         (page_h1, r'^([a-z0-9][a-z0-9_]+)$'),
+        (page_h1, r'^([a-z0-9][a-z0-9_]+) \((?:Resource|Data Source)\)$'),
     ]
 
     for text, pattern in combinations:
