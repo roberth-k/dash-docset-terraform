@@ -1,0 +1,31 @@
+name: Tag Next Release
+on:
+  schedule:
+    - cron: "0 18 * * 0"  # every Sunday at 6pm UTC
+  workflow_dispatch:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: before-version-update
+        name: get current version
+        run: 'echo ::set-output "name=version::$(cat version/docset)"'
+      - run: ./scripts/update-version.sh
+      - id: after-version-update
+        name: get new version
+        run: 'echo ::set-output "name=version::$(cat version/docset)"'
+      - name: push tag
+        if: ${{ steps.before-version-update.outputs.version != steps.after-version-update.outputs.version }}
+        run: |
+          git config --global user.email "${{ secrets.CI_USER_EMAIL }}"
+          git config --global user.name  "${{ secrets.CI_USER_NAME }}"
+          git add version/docset
+          git add version/terraform
+          git commit -m "v${{ steps.awscli.outputs.version }}"
+          git tag v${{ steps.after-version-update.outputs.version }}
+          git push \
+              "https://${{ secrets.CI_USER_USERNAME }}:${{ secrets.CI_USER_ACCESS_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" \
+              HEAD:main \
+              --tags
