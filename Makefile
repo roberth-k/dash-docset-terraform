@@ -13,6 +13,15 @@ STATIC_FILES := \
 
 ###
 
+.PHONY: version/update
+
+version/update: venv
+	./scripts/terraform-version.sh > version/terraform
+	./scripts/providers.py > version/providers
+	echo "$(shell cat ./version/terraform).$(shell date +%y%m%d)" > version/docset
+
+###
+
 .PHONY: test/unit
 
 test/unit: venv
@@ -59,7 +68,7 @@ clean:
 
 .build/.done-requirements: .venv/bin/activate requirements.txt
 	@mkdir -p $(dir $@)
-	pip3 install -r requirements.txt
+	pip3 install -q -r requirements.txt
 	@touch $@
 
 .build/$(DOCSET_VERSION)/.done-cloning: scripts/clone.sh scripts/providers.py version/docset version/terraform

@@ -31,6 +31,6 @@ while read line; do
     tag=$(echo $line | cut -d' ' -f3)
 
     clone $repo $tag $dstdir/providers/$name
-done < <( $SCRIPT_DIR/providers.py )
+done < <(cat $SCRIPT_DIR/../version/providers)
 
 wait
