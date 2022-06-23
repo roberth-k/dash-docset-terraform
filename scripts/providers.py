@@ -25,6 +25,8 @@ PROVIDER_FILTERS = [
 
 
 def main():
+    lines = []
+
     for provider_filter in PROVIDER_FILTERS:
         if '/' in provider_filter:
             namespace, name = provider_filter.split('/')
@@ -65,7 +67,12 @@ def main():
                 continue
 
             latest_version, latest_version_tag = get_latest_version_tag(link)
-            print(f'{full_name} {source} {latest_version_tag}')
+            lines.append(f'{full_name} {source} {latest_version_tag}')
+
+    lines.sort(key=lambda x: x.lower())
+
+    for line in lines:
+        print(line)
 
 
 def get_latest_version_tag(link: str) -> Tuple[str, str]:
