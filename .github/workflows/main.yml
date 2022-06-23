@@ -13,8 +13,7 @@ jobs:
         with:
           python-version: '3.9'
       - run: 'make test/unit'
-#      - run: 'make -j$(( $(nproc) + 1 ))'
-      - run: touch Terraform.tgz
+      - run: 'make -j$(( $(nproc) + 1 ))'
       - uses: actions/upload-artifact@v2
         with:
           name: Terraform.tgz
@@ -30,15 +29,19 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: Terraform.tgz
-      - uses: actions/create-release@v1
+
+      - name: create draft release
+        uses: actions/create-release@v1
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.CI_USER_ACCESS_TOKEN }}
         with:
-          tag_name: ${GITHUB_REF##*/}
-          release_name: ${GITHUB_REF##*/}
+          tag_name: ${{ github.action_ref }}
+          release_name: ${{ github.action_ref }}
           draft: true
-      - uses: actions/upload-release-asset@v1
+
+      - name: upload docset to release
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.CI_USER_ACCESS_TOKEN }}
         with:
@@ -46,7 +49,8 @@ jobs:
           asset_path: Terraform.tgz
           asset_name: Terraform.tgz
           asset_content_type: application/gzip
-      - name: publish draft release
+
+      - name: publish release
         env:
           GITHUB_TOKEN: ${{ secrets.CI_USER_ACCESS_TOKEN }}
         run: |
