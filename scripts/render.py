@@ -99,7 +99,8 @@ def render_markdown(text: str, flavor: str) -> markdown2.UnicodeWithAttrs:
 
     text = wrap_content_in_markdown_div(text)
 
-    text = wrap_blocks(text)
+    # todo: this still isn't working right
+    # text = wrap_blocks(text)
 
     extras = [
         'fenced-code-blocks',
