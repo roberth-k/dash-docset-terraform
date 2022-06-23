@@ -1,11 +1,11 @@
-name: docset
+name: Main
 
 on:
   - push
 
 jobs:
-  build_docset:
-    name: Build and Release Docset
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -13,8 +13,47 @@ jobs:
         with:
           python-version: '3.9'
       - run: 'make test/unit'
-      - run: 'make -j$(( $(nproc) + 1 ))'
+#      - run: 'make -j$(( $(nproc) + 1 ))'
+      - run: touch Terraform.tgz
       - uses: actions/upload-artifact@v2
         with:
           name: Terraform.tgz
           path: .build/latest/Terraform.tgz
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: Terraform.tgz
+      - uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_USER_ACCESS_TOKEN }}
+        with:
+          tag_name: ${GITHUB_REF##*/}
+          release_name: ${GITHUB_REF##*/}
+          draft: true
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_USER_ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: Terraform.tgz
+          asset_name: Terraform.tgz
+          asset_content_type: application/gzip
+      - name: publish draft release
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_USER_ACCESS_TOKEN }}
+        run: |
+          curl \
+            --show-error --fail -i \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/${{ steps.create_release.outputs.id }}" \
+            -XPATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -d '{"draft": false}'
