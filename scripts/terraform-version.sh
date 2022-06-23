@@ -4,8 +4,8 @@ set -euo pipefail
 GITHUB_API_URL=${GITHUB_API_URL:-https://api.github.com}
 
 terraform_version=$( \
-    curl -s "${GITHUB_API_URL}/repos/hashicorp/terraform/releases?per_page=1" \
-    | jq -r '[.[] | select(.name) | .name][0]' \
+    curl -s "${GITHUB_API_URL}/repos/hashicorp/terraform/releases?per_page=50" \
+    | jq -r '[.[] | select(.draft == false and .prerelease == false) | select(.name) | .name][0]' \
 )
 
 # remove v from the start of the tag
