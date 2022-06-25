@@ -1,7 +1,11 @@
-name: Main
+name: Build and Release
 
 on:
-  - push
+  push:
+    branches:
+      - "**"
+    tags:
+      - "v*"
 
 jobs:
   build:
