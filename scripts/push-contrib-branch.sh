@@ -46,7 +46,7 @@ mkdir -p "versions/$tag"
 
 mv "$docset_json" docset.json
 cp "$artefact" "$tgz_name"
-cp "$artefact" "versions/$tag/$tgz_name"
+cp "$artefact" "versions/$version/$tgz_name"
 
 git add -A
 git commit -m "Terraform.docset $tag"
