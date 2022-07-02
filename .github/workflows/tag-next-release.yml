@@ -23,8 +23,7 @@ jobs:
         run: |
           git config --global user.email "${{ secrets.CI_USER_EMAIL }}"
           git config --global user.name  "${{ secrets.CI_USER_NAME }}"
-          git add version/docset
-          git add version/terraform
+          git add .
           git commit -m "v${{ steps.after-version-update.outputs.version }}"
           git tag v${{ steps.after-version-update.outputs.version }}
           git push \
