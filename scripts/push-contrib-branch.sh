@@ -42,7 +42,7 @@ cat docset.json | \
 		' \
 	> "$docset_json"
 
-mkdir -p "versions/$tag"
+mkdir -p "versions/$version"
 
 mv "$docset_json" docset.json
 cp "$artefact" "$tgz_name"
