@@ -21,7 +21,7 @@ PROVIDER_FILTERS = [
     'PagerDuty/pagerduty',
     'splunk/splunk',
     'splunk/victorops',
-    'terraform-provider-openstack/openstack'.
+    'terraform-provider-openstack/openstack',
 ]
 
 
