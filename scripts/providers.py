@@ -11,6 +11,7 @@ EXCLUDED_PROVIDERS = [
 ]
 
 PROVIDER_FILTERS = [
+    'Azure/azapi',
     'hashicorp',
     'cloudflare/cloudflare',
     'digitalocean/digitalocean',
