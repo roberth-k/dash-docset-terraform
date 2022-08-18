@@ -4,7 +4,7 @@ import dataclasses
 import re
 import sqlite3
 from os.path import join, relpath, dirname, isdir, basename
-from typing import List, Optional
+from typing import List, Optional, Dict
 from urllib.parse import quote as url_quote
 
 import markdown2
@@ -61,6 +61,15 @@ class Args:
         )
 
 
+@dataclasses.dataclass
+class Markdown:
+    text: str
+    metadata: object
+
+    def __str__(self) -> str:
+        return self.text
+
+
 def main():
     args = Args.parse()
 
@@ -90,7 +99,7 @@ def main():
     )
 
 
-def render_markdown(text: str, flavor: str) -> markdown2.UnicodeWithAttrs:
+def render_markdown(text: str, flavor: str) -> Markdown:
     # Leading whitespace can mess with metadata, so ensure there isn't any.
     text = text.strip()
 
@@ -120,7 +129,10 @@ def render_markdown(text: str, flavor: str) -> markdown2.UnicodeWithAttrs:
     if not hasattr(md, 'metadata') or not md.metadata:
         md.metadata = {}
 
-    return md
+    return Markdown(
+        text=str(md),
+        metadata=md.metadata,
+    )
 
 
 @dataclasses.dataclass
@@ -133,7 +145,7 @@ class Page:
     is_provider_index: bool
 
     @staticmethod
-    def from_markdown(body: markdown2.UnicodeWithAttrs, args: Args) -> 'Page':
+    def from_markdown(body: Markdown, args: Args) -> 'Page':
         soup = BeautifulSoup(str(body), 'html5lib')
 
         return Page(
