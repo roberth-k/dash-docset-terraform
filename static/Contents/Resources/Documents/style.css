@@ -65,12 +65,12 @@ div.codehilite code {
 
 .admonition {
     display: block;
-    padding: 16px 16px 16px 12px;
+    padding: 16px;
     border: 1px solid rgb(191, 212, 255);
     background: rgb(251, 252, 255);
-    border-radius: 2px;
+    border-radius: 4px;
     color: rgb(31, 33, 36);
-    margin: 8px auto;
+    margin: 16px auto;
 }
 
 .admonition > strong {
@@ -93,7 +93,7 @@ div.codehilite code {
 }
 
 .admonition.warning {
-    border-color: #fdeeba;
+    border-color: #fddcba;
     background-color: #fffdf6;
 }
 
