@@ -2,6 +2,7 @@
 set -euo pipefail
 
 readonly tag="${GITHUB_REF##*/}"
+readonly version="${tag#v}"
 
 curl \
     --show-error --fail -i \
@@ -12,7 +13,7 @@ curl \
     -H "Content-Type: application/json" \
     -d "
         {
-            \"title\": \"Terraform $tag\",
+            \"title\": \"Terraform $version\",
             \"head\": \"roberth-k:terraform-$tag\",
             \"base\": \"master\",
             \"body\": \"This is an automated PR. Please report issues to https://github.com/roberth-k/dash-docset-terraform.\"
