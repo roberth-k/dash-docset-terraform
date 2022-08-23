@@ -124,3 +124,7 @@ hr {
 ul li {
     padding-top: 12px;
 }
+
+ul li > p {
+    margin: 0;
+}
