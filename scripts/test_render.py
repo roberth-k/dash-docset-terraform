@@ -76,3 +76,42 @@ The below configuration uses [`depends_on`](https://www.terraform.io/language/me
 
         actual = render.wrap_blocks(input)
         self.assertEqual(actual, expect)
+
+
+class TestAdmonitions(ut.TestCase):
+    def test_admonitions_1(self):
+        input = '''-> **title:** text'''
+        expect = '''.. note:: title
+    text
+'''
+        actual = render.admonitions(input)
+        self.assertEqual(expect, actual)
+
+    def test_admonitions_2(self):
+        input = '''
+# example
+
+-> **title:** text
+~> **title2:** text2
+
+~> text3
+
+'''
+
+        expect = '''
+# example
+
+.. note:: title
+    text
+
+.. warning:: title2
+    text2
+
+
+.. warning::
+    text3
+
+
+'''
+        actual = render.admonitions(input)
+        self.assertEqual(expect, actual)

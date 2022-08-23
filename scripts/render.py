@@ -106,12 +106,10 @@ def render_markdown(text: str, flavor: str) -> Markdown:
     # Pygments doesn't recognise ```hcl.
     text = text.replace('```hcl', '```terraform')
 
-    text = wrap_content_in_markdown_div(text)
-
-    # todo: this still isn't working right
-    # text = wrap_blocks(text)
+    text = admonitions(text)
 
     extras = [
+        'admonitions',
         'fenced-code-blocks',
         'header-ids',
         'markdown-in-html',
@@ -341,26 +339,40 @@ def derive_resource_name(metadata_page_title: str, page_h1: str) -> Optional[str
     return None
 
 
-def wrap_content_in_markdown_div(markdown: str) -> str:
-    """
-    Wraps the content (excluding optional metadata at the top of a .md file)
-    in a <div markdown="1">, as otherwise embedded html will cause the renderer
-    to start skipping markdown syntax.
-    """
+def admonitions(text: str) -> str:
+    import re
 
-    # Assume that if a metadata block exists, it's at the start of the markdown
-    # and bounded by triple dashes on individual lines.
+    # These were found empirically.
+    # The Terraform admonition format is
+    #
+    # ~> **title** content.
+    #
+    # Title is optional.
 
-    if markdown.startswith('---'):
-        lines = markdown.splitlines()
-        metadata_end_index = lines.index('---', 1)
-        lines.insert(metadata_end_index + 1, '<div markdown="1">')
-        lines.append('</div>')
-        markdown = '\n'.join(lines)
-    else:
-        markdown = f'<div markdown="1">\n{markdown}\n</div>\n'
+    prefixes = [
+        ('->', 'note'),
+        ('~>', 'warning'),
+    ]
 
-    return markdown
+    pattern = r'^(' + '|'.join([re.escape(x) for x, _ in prefixes]) + r')\s+(\*\*[^*]+\*\*)?(.*?)$'
+
+    def repl(match):
+        icon = dict(prefixes)[match.group(1)]
+
+        if match.group(2):
+            title = ' ' + match.group(2).strip().strip('*').strip(':')
+        else:
+            title = ''
+
+        body = match.group(3).strip()
+
+        return f'.. {icon}::{title}\n    {body}\n'
+
+    return re.sub(
+        pattern=pattern,
+        repl=repl,
+        string=text,
+        flags=re.IGNORECASE | re.MULTILINE)
 
 
 def wrap_blocks(markdown: str) -> str:
