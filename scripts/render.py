@@ -361,13 +361,20 @@ def admonitions(text: str) -> str:
         icon = dict(prefixes)[match.group(1)]
 
         if match.group(2):
-            title = ' ' + match.group(2).strip().strip('*').strip(':')
+            title = match.group(2).strip().strip('*').strip(':')
         else:
-            title = ' NOTE'
+            title = 'Note'
+
+        if title.casefold() == 'note':
+            # Most warnings and danger admonitions are still called "notes".
+            #
+            # Since we don't implement icons, fudge the title so it matches
+            # the colour of the admonition.
+            title = icon
 
         body = match.group(3).strip()
 
-        return f'.. {icon}::{title}\n    {body}\n'
+        return f'.. {icon}:: {title}\n    {body}\n'
 
     return re.sub(
         pattern=pattern,
