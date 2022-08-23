@@ -104,3 +104,10 @@ div.codehilite code {
 .admonition p {
     margin: 0;
 }
+
+hr {
+    height: 2px;
+    margin: 2rem 0;
+    background-color: #f5f5f5;
+    border: none;
+}
