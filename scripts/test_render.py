@@ -108,7 +108,7 @@ class TestAdmonitions(ut.TestCase):
     text2
 
 
-.. warning::
+.. warning:: warning
     text3
 
 
