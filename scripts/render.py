@@ -352,6 +352,7 @@ def admonitions(text: str) -> str:
     prefixes = [
         ('->', 'note'),
         ('~>', 'warning'),
+        ('!>', 'danger'),
     ]
 
     pattern = r'^(' + '|'.join([re.escape(x) for x, _ in prefixes]) + r')\s+(\*\*[^*]+\*\*)?(.*?)$'

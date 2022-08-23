@@ -101,6 +101,15 @@ div.codehilite code {
     color: rgb(160, 125, 2);
 }
 
+.admonition.danger {
+    border-color: #efc7cc;
+    background-color: #fdfafb;
+}
+
+.admonition.danger > em {
+    color: #7f222c;
+}
+
 .admonition p {
     margin: 0;
 }
