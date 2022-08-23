@@ -362,7 +362,7 @@ def admonitions(text: str) -> str:
         if match.group(2):
             title = ' ' + match.group(2).strip().strip('*').strip(':')
         else:
-            title = ''
+            title = ' NOTE'
 
         body = match.group(3).strip()
 
