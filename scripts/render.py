@@ -340,8 +340,6 @@ def derive_resource_name(metadata_page_title: str, page_h1: str) -> Optional[str
 
 
 def admonitions(text: str) -> str:
-    import re
-
     # These were found empirically.
     # The Terraform admonition format is
     #
@@ -381,41 +379,6 @@ def admonitions(text: str) -> str:
         repl=repl,
         string=text,
         flags=re.IGNORECASE | re.MULTILINE)
-
-
-def wrap_blocks(markdown: str) -> str:
-    combinations = [
-        ('->', 'note'),
-        ('~>', 'warning'),
-    ]
-
-    def repl(match):
-        if match.group(1):
-            title = match.group(1).strip().strip('*')
-        else:
-            title = None
-
-        body = match.group(2).strip()
-
-        text = f'<div class="alert alert-{kind}" markdown="1">\n'
-
-        if title:
-            text += f'<div class="alert-title" markdown="1">\n{title}\n</div>\n'
-
-        text += f'{body}\n</div>\n\n'
-
-        return text
-
-    for prefix, kind in combinations:
-        pattern = re.escape(prefix) + r'\s*(\*\*[^*]+\*\*)?(.*?[\n])[\n]'
-
-        markdown = re.sub(
-            pattern=pattern,
-            repl=repl,
-            string=markdown,
-            flags=re.DOTALL)
-
-    return markdown
 
 
 @dataclasses.dataclass

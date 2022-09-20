@@ -29,55 +29,6 @@ class TestDeriveResourceName(ut.TestCase):
             self.assertEqual(actual, expect)
 
 
-class TestWrapBlocks(ut.TestCase):
-    def test_wrap_single_line_warning(self):
-        input = '''
-# foo
-
-~> **Note:** You can specify `encrypted` or `snapshot_id` but not both.
-
-# bar
-'''
-
-        expect = '''
-# foo
-
-<div class="alert alert-warning" markdown="1">
-<div class="alert-title" markdown="1">
-Note:
-</div>
-You can specify `encrypted` or `snapshot_id` but not both.
-</div>
-
-# bar
-'''
-
-        actual = render.wrap_blocks(input)
-        self.assertEqual(expect, actual)
-
-    def test_wrap_note_with_no_title(self):
-        input = '''
-# foo
-
--> The below configuration uses [`depends_on`](https://www.terraform.io/language/meta-arguments/depends_on) to prevent ordering issues with API Gateway automatically creating the log group first and a variable for naming consistency. Other ordering and naming methodologies may be more appropriate for your environment.
-
-# bar
-'''
-
-        expect = '''
-# foo
-
-<div class="alert alert-note" markdown="1">
-The below configuration uses [`depends_on`](https://www.terraform.io/language/meta-arguments/depends_on) to prevent ordering issues with API Gateway automatically creating the log group first and a variable for naming consistency. Other ordering and naming methodologies may be more appropriate for your environment.
-</div>
-
-# bar
-'''
-
-        actual = render.wrap_blocks(input)
-        self.assertEqual(actual, expect)
-
-
 class TestAdmonitions(ut.TestCase):
     def test_admonitions_1(self):
         input = '''-> **title:** text'''
