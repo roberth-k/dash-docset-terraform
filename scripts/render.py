@@ -353,7 +353,8 @@ def admonitions(text: str) -> str:
         ('!>', 'danger'),
     ]
 
-    pattern = r'^(' + '|'.join([re.escape(x) for x, _ in prefixes]) + r')\s+(\*\*[^*]+\*\*)?(.*?)$'
+    pattern_prefixes = '|'.join([re.escape(x) for x, _ in prefixes])
+    pattern = fr'^({pattern_prefixes})\s+(\*\*[^*]+\*\*)?(.*(?:\n.+)*)$'
 
     def repl(match):
         icon = dict(prefixes)[match.group(1)]
@@ -370,9 +371,12 @@ def admonitions(text: str) -> str:
             # the colour of the admonition.
             title = icon
 
-        body = match.group(3).strip()
+        body = ' '.join([
+            line.strip()
+            for line in match.group(3).split('\n')
+        ])
 
-        return f'.. {icon}:: {title}\n    {body}\n'
+        return f'.. {icon}:: {title}\n    {body}'
 
     return re.sub(
         pattern=pattern,

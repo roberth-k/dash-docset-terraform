@@ -33,8 +33,7 @@ class TestAdmonitions(ut.TestCase):
     def test_admonitions_1(self):
         input = '''-> **title:** text'''
         expect = '''.. note:: title
-    text
-'''
+    text'''
         actual = render.admonitions(input)
         self.assertEqual(expect, actual)
 
@@ -43,6 +42,7 @@ class TestAdmonitions(ut.TestCase):
 # example
 
 -> **title:** text
+
 ~> **title2:** text2
 
 ~> text3
@@ -58,11 +58,47 @@ class TestAdmonitions(ut.TestCase):
 .. warning:: title2
     text2
 
-
 .. warning:: warning
     text3
 
+'''
+        actual = render.admonitions(input)
+        self.assertEqual(expect, actual)
 
+    def test_admonitions_multiline(self):
+        input = '''
+Preceding paragraph.
+Contains multiple lines.
+
+-> **Hold up!:** This is a
+multiline admonition
+   with a title.
+
+Middle paragraph.
+Also contains multiple lines.
+
+-> This is a multiline admonition.
+It has no title.
+
+Final paragraph.
+This, too, contains multiple lines.
+'''
+
+        expect = '''
+Preceding paragraph.
+Contains multiple lines.
+
+.. note:: Hold up!
+    This is a multiline admonition with a title.
+
+Middle paragraph.
+Also contains multiple lines.
+
+.. note:: note
+    This is a multiline admonition. It has no title.
+
+Final paragraph.
+This, too, contains multiple lines.
 '''
         actual = render.admonitions(input)
         self.assertEqual(expect, actual)
