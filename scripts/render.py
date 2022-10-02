@@ -316,6 +316,13 @@ def derive_resource_name(metadata_page_title: str, page_h1: str) -> Optional[str
     hardcoded = [
         (metadata_page_title, r'^External (?:Data Source|Resource)$', 'external'),
         (metadata_page_title, r'^HTTP Data Source$', 'http'),
+
+        # Workaround: these pages are erroneously using an H2 element as the title.
+        (metadata_page_title, r'^Akamai: SecurityPolicy$', 'akamai_appsec_security_policy'),
+        (metadata_page_title, r'^Akamai: Reputation Profile Actions$', 'akamai_appsec_reputation_profile_actions'),
+        (metadata_page_title, r'^Akamai: gtm resource$', 'akamai_gtm_resource'),
+        (metadata_page_title, r'^Akamai: property$', 'akamai_property'),
+        (metadata_page_title, r'^Fastly: user$', 'fastly_user'),
     ]
 
     for text, pattern, resource_name in hardcoded:
@@ -326,9 +333,12 @@ def derive_resource_name(metadata_page_title: str, page_h1: str) -> Optional[str
         (metadata_page_title, r'^[^:]+\: ([a-z0-9][a-z0-9_]+)(?: [Rr]esource| [Dd]ata [Ss]ource)?$'),
         (metadata_page_title, r'^([a-z0-9][a-z0-9_]+) (?:Resource|Data Source) \- terraform\-provider\-[a-z-]+$'),
         (metadata_page_title, r'^(?:Resource|Data Source) ([a-z0-9][a-z0-9_]+) \- terraform\-provider\-[a-z-]+$'),
+        (metadata_page_title, r'^(?:Resource|Data Source) ([a-z0-9][a-z0-9_]+)$'),
         (page_h1, r'^(?:Resource|Data Source)\: ([a-z0-9][a-z0-9_]+)$'),
         (page_h1, r'^([a-z0-9][a-z0-9_]+)$'),
         (page_h1, r'^([a-z0-9][a-z0-9_]+) \((?:Resource|Data Source)\)$'),
+        (page_h1, r'^([a-z0-9][a-z0-9_]+) (?:Resource|Data Source)$'),
+        (page_h1, r'^([a-z0-9][a-z0-9_]+) (?:resource|data source)$'),
     ]
 
     for text, pattern in combinations:

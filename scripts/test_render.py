@@ -22,6 +22,10 @@ class TestDeriveResourceName(ut.TestCase):
             ('vsphere_role', 'VMware vSphere: Role', 'vsphere_role'),
             ('splunk_data_ui_views', '', 'Resource: splunk_data_ui_views'),
             ('cloudflare_access_application', 'cloudflare_access_application Resource - Cloudflare', 'cloudflare_access_application (Resource)'),
+            ('databricks_obo_token', '', 'databricks_obo_token Resource'),
+            ('databricks_mws_workspaces', '', 'databricks_mws_workspaces resource'),
+            ('akamai_appsec_security_policy', 'Akamai: SecurityPolicy', ''),
+            ('nexus_repository_pypi_group', 'Resource nexus_repository_pypi_group', 'Resource nexus_repository_pypi_group'),
         ]
 
         for expect, metadata, title in test_cases:
