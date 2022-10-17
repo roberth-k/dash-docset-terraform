@@ -1,4 +1,3 @@
-akamai/akamai https://github.com/akamai/terraform-provider-akamai v2.4.2
 aliyun/alicloud https://github.com/aliyun/terraform-provider-alicloud v1.188.0
 auth0/auth0 https://github.com/auth0/terraform-provider-auth0 v0.38.0
 Azure/azapi https://github.com/Azure/terraform-provider-azapi v1.0.0
@@ -7,7 +6,7 @@ confluentinc/confluent https://github.com/confluentinc/terraform-provider-conflu
 confluentinc/confluentcloud https://github.com/confluentinc/terraform-provider-confluentcloud v0.6.0
 databricks/databricks https://github.com/databricks/terraform-provider-databricks v1.5.0
 DataDog/datadog https://github.com/DataDog/terraform-provider-datadog v3.16.0
-datadrivers/nexus https://github.com/datadrivers/terraform-provider-nexus v1.21.0
+datadrivers/nexus https://github.com/datadrivers/terraform-provider-nexus v1.21.1
 digitalocean/digitalocean https://github.com/digitalocean/terraform-provider-digitalocean v2.23.0
 fastly/fastly https://github.com/fastly/terraform-provider-fastly v2.4.0
 fly-apps/fly https://github.com/fly-apps/terraform-provider-fly v0.0.20
@@ -50,7 +49,6 @@ hashicorp/vsphere https://github.com/hashicorp/terraform-provider-vsphere v2.2.0
 heroku/heroku https://github.com/heroku/terraform-provider-heroku v5.1.5
 honeycombio/honeycombio https://github.com/honeycombio/terraform-provider-honeycombio v0.11.1
 integrations/github https://github.com/integrations/terraform-provider-github v5.5.0
-jfrog/artifactory https://github.com/jfrog/terraform-provider-artifactory v6.16.3
 microsoft/azuredevops https://github.com/microsoft/terraform-provider-azuredevops v0.2.2
 PagerDuty/pagerduty https://github.com/PagerDuty/terraform-provider-pagerduty v2.6.3
 splunk/splunk https://github.com/splunk/terraform-provider-splunk v1.4.17
