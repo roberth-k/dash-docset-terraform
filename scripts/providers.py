@@ -11,7 +11,7 @@ EXCLUDED_PROVIDERS = [
 ]
 
 PROVIDER_FILTERS = [
-    'akamai/akamai',
+    # 'akamai/akamai',  # Buggy
     'aliyun/alicloud',
     'auth0/auth0',
     'Azure/azapi',
@@ -29,7 +29,7 @@ PROVIDER_FILTERS = [
     'heroku/heroku',
     'honeycombio',
     'integrations/github',
-    'jfrog/artifactory',
+    # 'jfrog/artifactory',  # Buggy
     'microsoft/azuredevops',
     'PagerDuty/pagerduty',
     'splunk/splunk',
