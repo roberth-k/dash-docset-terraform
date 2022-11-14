@@ -26,6 +26,7 @@ class TestDeriveResourceName(ut.TestCase):
             ('databricks_mws_workspaces', '', 'databricks_mws_workspaces resource'),
             ('akamai_appsec_security_policy', 'Akamai: SecurityPolicy', ''),
             ('nexus_repository_pypi_group', 'Resource nexus_repository_pypi_group', 'Resource nexus_repository_pypi_group'),
+            ('azuredevops_serviceendpoint_github', 'AzureDevops: Data Source: azuredevops_serviceendpoint_github', 'Data Source : azuredevops_serviceendpoint_github'),
         ]
 
         for expect, metadata, title in test_cases:
