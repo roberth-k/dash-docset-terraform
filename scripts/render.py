@@ -114,6 +114,7 @@ def render_markdown(text: str, flavor: str) -> Markdown:
         'header-ids',
         'markdown-in-html',
         'tables',
+        'cuddled-lists',
     ]
 
     if flavor == 'provider':
