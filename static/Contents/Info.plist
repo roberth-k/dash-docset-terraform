@@ -12,7 +12,7 @@
 	<string>terraform</string>
 
 	<key>dashIndexFilePath</key>
-	<string>index.html</string>
+	<string>terraform/intro/index.html</string>
 
 	<key>DashDocSetFamily</key>
 	<string>dashtoc</string>
