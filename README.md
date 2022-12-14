@@ -19,11 +19,12 @@ _The maintainer of this repository is not affiliated with HashiCorp._
 
 ## How to Build
 
-The system must provide the following:
+The docset was developed using the following:
 
 - bash
 - git
 - GNU Make
+- GNU Coreutils
 - Python 3.9
 
 To build the docset, run:
