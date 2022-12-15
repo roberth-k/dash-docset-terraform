@@ -238,6 +238,7 @@ def render_full_page(args: Args, page: Page) -> str:
         <html><!-- Online page at {full_url} -->
             <head>
                 <title>{page.index_title}</title>
+                <meta charset="utf-8">
                 <link rel="stylesheet" href="{args.output_relative_stylesheet_file}">
             </head>
             <body>
