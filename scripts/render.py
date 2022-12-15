@@ -4,7 +4,7 @@ import dataclasses
 import re
 import sqlite3
 from os.path import join, relpath, dirname, isdir, basename
-from typing import List, Optional, Dict
+from typing import List, Optional
 from urllib.parse import quote as url_quote
 
 import markdown2
