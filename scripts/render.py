@@ -73,7 +73,7 @@ class Markdown:
 def main():
     args = Args.parse()
 
-    with open(args.input_file, 'r') as fp:
+    with open(args.input_file, 'r', encoding='utf8') as fp:
         input_data = fp.read()
 
     body = render_markdown(text=input_data, flavor=args.flavor)
@@ -84,7 +84,7 @@ def main():
     html = add_section_anchors(html)
     html = update_hrefs(html, args)
 
-    with open(args.output_file, 'w') as fp:
+    with open(args.output_file, 'w', encoding='utf8') as fp:
         fp.write(html)
 
     write_db(
