@@ -169,10 +169,10 @@ class Page:
                 return title
         elif self.flavor == 'provider':
             if self.is_data_source or self.is_resource:
-                resource_name = derive_resource_name(self.title_metadata, self.title_h1)
+                resource_name = derive_resource_name(self.title_metadata, self.title_h1, self.output_file)
 
                 if not resource_name:
-                    raise RuntimeError('failed to derive resource name')
+                    raise RuntimeError(f'failed to derive resource name f or {self.output_file}')
 
                 return resource_name
             else:
@@ -311,7 +311,12 @@ def update_hrefs(html: str, args: Args) -> str:
     return str(soup)
 
 
-def derive_resource_name(metadata_page_title: str, page_h1: str) -> Optional[str]:
+def derive_resource_name(metadata_page_title: str, page_h1: str, output_file: str) -> Optional[str]:
+    # todo -- bit of a hack
+    output_path_components = output_file.split('/')
+    if len(output_path_components) > 4 and output_path_components[-5] == 'google':
+        return 'google_' + output_path_components[-1].split('.')[0]
+
     metadata_page_title = metadata_page_title.strip()
     page_h1 = page_h1.strip()
 
