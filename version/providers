@@ -34,6 +34,7 @@ hashicorp/kubernetes https://github.com/hashicorp/terraform-provider-kubernetes 
 hashicorp/local https://github.com/hashicorp/terraform-provider-local v2.4.0
 hashicorp/nomad https://github.com/hashicorp/terraform-provider-nomad v1.4.19
 hashicorp/null https://github.com/hashicorp/terraform-provider-null v3.2.1
+hashicorp/oci https://github.com/oracle/terraform-provider-oci v4.114.0
 hashicorp/opc https://github.com/terraform-providers/terraform-provider-opc v1.4.1
 hashicorp/oraclepaas https://github.com/terraform-providers/terraform-provider-oraclepaas v1.5.3
 hashicorp/random https://github.com/hashicorp/terraform-provider-random v3.4.3
