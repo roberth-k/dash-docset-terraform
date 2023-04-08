@@ -51,6 +51,7 @@ honeycombio/honeycombio https://github.com/honeycombio/terraform-provider-honeyc
 integrations/github https://github.com/integrations/terraform-provider-github v5.18.3
 microsoft/azuredevops https://github.com/microsoft/terraform-provider-azuredevops v0.4.0
 PagerDuty/pagerduty https://github.com/PagerDuty/terraform-provider-pagerduty v2.11.2
+oracle/oci https://github.com/oracle/terraform-provider-oci v4.115.0
 splunk/splunk https://github.com/splunk/terraform-provider-splunk v1.4.18
 splunk/victorops https://github.com/splunk/terraform-provider-victorops v0.1.4
 terraform-provider-openstack/openstack https://github.com/terraform-provider-openstack/terraform-provider-openstack v1.51.1

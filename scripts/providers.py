@@ -31,6 +31,7 @@ PROVIDER_FILTERS = [
     'integrations/github',
     # 'jfrog/artifactory',  # Buggy
     'microsoft/azuredevops',
+    'oracle/oci',
     'PagerDuty/pagerduty',
     'splunk/splunk',
     'splunk/victorops',
