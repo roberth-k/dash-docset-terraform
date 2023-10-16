@@ -8,6 +8,9 @@ REGISTRY_URL = 'https://registry.terraform.io'
 EXCLUDED_PROVIDERS = [
     'hashicorp/google-beta',
     'hashicorp/kubernetes-alpha',
+    'hashicorp/hashicups',  # demo repository
+    'hashicorp/opc',  # disappeared
+    'hashicorp/oraclepaas',  # disappeared
 ]
 
 PROVIDER_FILTERS = [
