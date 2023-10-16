@@ -18,7 +18,10 @@ function clone {
 
     1>&2 echo "cloning: $repo@$tag"
     mkdir -p $dir
-    git clone -q -c advice.detachedHead=false -b $tag $repo $dir &
+    ( \
+        git clone -q -c advice.detachedHead=false -b $tag $repo $dir \
+        || (1>&2 echo "failed: $repo@$tag") \
+    ) &
 }
 
 mkdir -p $dstdir/terraform
