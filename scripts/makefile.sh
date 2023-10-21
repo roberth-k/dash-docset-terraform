@@ -25,6 +25,11 @@ function emit_provider_rules {
         find "$provider_src/website/docs" -type f \( -name '*.md' -or -name '*.markdown' \) -print0 \
         | while read -d $'\0' input_file
         do
+            if [[ "$input_file" == $provider_src/website/docs/cdktf/* ]]; then
+                # Ignore CDKTF documentation.
+                continue
+            fi
+
             emit_rule "provider" "$provider_src/website/docs" $input_file $provider_dir
         done
     elif [[ -d "$provider_src/docs" ]]; then
