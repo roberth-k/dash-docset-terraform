@@ -86,7 +86,7 @@ echo "TARGETS :="
 
 emit_terraform_rules
 
-find "$srcdir/providers" -type d -mindepth 2 -maxdepth 2 -print0 \
+find "$srcdir/providers" -mindepth 2 -maxdepth 2 -type d -print0 \
 | while read -d $'\0' provider_src
 do
     emit_provider_rules $provider_src
