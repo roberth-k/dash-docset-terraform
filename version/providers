@@ -2,7 +2,7 @@ aliyun/alicloud https://github.com/aliyun/terraform-provider-alicloud v1.214.1
 auth0/auth0 https://github.com/auth0/terraform-provider-auth0 v1.1.1
 Azure/azapi https://github.com/Azure/terraform-provider-azapi v1.11.0
 cloudflare/cloudflare https://github.com/cloudflare/terraform-provider-cloudflare v4.21.0
-confluentinc/confluent https://github.com/confluentinc/terraform-provider-confluent v1.56.0
+confluentinc/confluent https://github.com/confluentinc/terraform-provider-confluent v1.57.0
 databricks/databricks https://github.com/databricks/terraform-provider-databricks v1.33.0
 DataDog/datadog https://github.com/DataDog/terraform-provider-datadog v3.34.0
 datadrivers/nexus https://github.com/datadrivers/terraform-provider-nexus v1.22.0
@@ -15,7 +15,7 @@ hashicorp/archive https://github.com/hashicorp/terraform-provider-archive v2.4.1
 hashicorp/aws https://github.com/hashicorp/terraform-provider-aws v5.31.0
 hashicorp/awscc https://github.com/hashicorp/terraform-provider-awscc v0.67.0
 hashicorp/azuread https://github.com/hashicorp/terraform-provider-azuread v2.47.0
-hashicorp/azurerm https://github.com/hashicorp/terraform-provider-azurerm v3.85.0
+hashicorp/azurerm https://github.com/hashicorp/terraform-provider-azurerm v3.86.0
 hashicorp/azurestack https://github.com/hashicorp/terraform-provider-azurestack v1.0.0
 hashicorp/boundary https://github.com/hashicorp/terraform-provider-boundary v1.1.11
 hashicorp/cloudinit https://github.com/hashicorp/terraform-provider-cloudinit v2.3.3
@@ -28,7 +28,7 @@ hashicorp/hcp https://github.com/hashicorp/terraform-provider-hcp v0.79.0
 hashicorp/hcs https://github.com/hashicorp/terraform-provider-hcs v0.5.1
 hashicorp/helm https://github.com/hashicorp/terraform-provider-helm v2.12.1
 hashicorp/http https://github.com/hashicorp/terraform-provider-http v3.4.1
-hashicorp/kubernetes https://github.com/hashicorp/terraform-provider-kubernetes v2.24.0
+hashicorp/kubernetes https://github.com/hashicorp/terraform-provider-kubernetes v2.25.1
 hashicorp/local https://github.com/hashicorp/terraform-provider-local v2.4.1
 hashicorp/nomad https://github.com/hashicorp/terraform-provider-nomad v2.1.0
 hashicorp/null https://github.com/hashicorp/terraform-provider-null v3.2.2
@@ -43,7 +43,7 @@ hashicorp/vsphere https://github.com/hashicorp/terraform-provider-vsphere v2.6.1
 hashicorp/waypoint https://github.com/hashicorp/terraform-provider-waypoint v0.1.0
 heroku/heroku https://github.com/heroku/terraform-provider-heroku v5.2.7
 honeycombio/honeycombio https://github.com/honeycombio/terraform-provider-honeycombio v0.20.3
-integrations/github https://github.com/integrations/terraform-provider-github v5.42.0
+integrations/github https://github.com/integrations/terraform-provider-github v5.43.0
 microsoft/azuredevops https://github.com/microsoft/terraform-provider-azuredevops v0.10.0
 oracle/oci https://github.com/oracle/terraform-provider-oci v5.23.0
 PagerDuty/pagerduty https://github.com/PagerDuty/terraform-provider-pagerduty v3.4.0
