@@ -39,6 +39,7 @@ PROVIDER_FILTERS = [
     'splunk/splunk',
     'splunk/victorops',
     'terraform-provider-openstack/openstack',
+    'yandex-cloud/yandex',
 ]
 
 

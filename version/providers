@@ -50,3 +50,4 @@ PagerDuty/pagerduty https://github.com/PagerDuty/terraform-provider-pagerduty v3
 splunk/splunk https://github.com/splunk/terraform-provider-splunk v1.4.22
 splunk/victorops https://github.com/splunk/terraform-provider-victorops v0.1.4
 terraform-provider-openstack/openstack https://github.com/terraform-provider-openstack/terraform-provider-openstack v1.53.0
+yandex-cloud/yandex https://github.com/yandex-cloud/terraform-provider-yandex v0.104.0

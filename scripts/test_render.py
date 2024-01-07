@@ -28,7 +28,8 @@ class TestDeriveResourceName(ut.TestCase):
             ('nexus_repository_pypi_group', 'Resource nexus_repository_pypi_group', 'Resource nexus_repository_pypi_group', ''),
             ('azuredevops_serviceendpoint_github', 'AzureDevops: Data Source: azuredevops_serviceendpoint_github', 'Data Source : azuredevops_serviceendpoint_github', ''),
             ('google_cloud_run_v2_job_iam', '', '', '/Users/redacted/src/gh/roberth-k/dash-docset-terraform/.build/1.3.9.230305/Terraform.docset/Contents/Resources/Documents/providers/hashicorp/google/latest/docs/resources/cloud_run_v2_job_iam.html'),
-            ('oci_core_instance', 'Oracle: oci_core_instance', 'oci_core_instance', '')
+            ('oci_core_instance', 'Oracle: oci_core_instance', 'oci_core_instance', ''),
+            ('ydb_database_serverless', 'yandex_ydb_database_serverless', 'ydb_database_serverless', ''),
         ]
 
         for expect, metadata, title, output_file in test_cases:
