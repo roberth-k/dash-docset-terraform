@@ -11,6 +11,7 @@ EXCLUDED_PROVIDERS = [
     'hashicorp/hashicups',  # demo repository
     'hashicorp/opc',  # disappeared
     'hashicorp/oraclepaas',  # disappeared
+    'hashicorp/vsphere',  # causes build error
 ]
 
 PROVIDER_FILTERS = [
