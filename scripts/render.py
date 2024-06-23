@@ -172,7 +172,7 @@ class Page:
                 resource_name = derive_resource_name(self.title_metadata, self.title_h1, self.output_file)
 
                 if not resource_name:
-                    raise RuntimeError(f'failed to derive resource name f or {self.output_file}')
+                    raise RuntimeError(f'failed to derive resource name of {self.output_file}')
 
                 return resource_name
             else:
