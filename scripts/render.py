@@ -76,6 +76,15 @@ def main():
     with open(args.input_file, 'r', encoding='utf8') as fp:
         input_data = fp.read()
 
+    if is_file_ignored(text=input_data):
+        # Create empty file (so that Make considers it present), and
+        # don't add it to the database.
+
+        with open(args.output_file, 'w', encoding='utf8') as fp:
+            fp.write('')
+
+        exit(0)
+
     body = render_markdown(text=input_data, flavor=args.flavor)
 
     page = Page.from_markdown(body=body, args=args)
@@ -208,6 +217,13 @@ class Page:
     @property
     def is_data_source(self) -> bool:
         return self.flavor == 'provider' and basename(dirname(self.output_file)) == 'data-sources'
+
+
+def is_file_ignored(text: str) -> bool:
+    if '//resource not exposed to user through Terraform, but generated.' in text:
+        return True
+    else:
+        return False
 
 
 def render_full_page(args: Args, page: Page) -> str:
