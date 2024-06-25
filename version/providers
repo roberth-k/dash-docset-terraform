@@ -22,7 +22,7 @@ hashicorp/cloudinit https://github.com/hashicorp/terraform-provider-cloudinit v2
 hashicorp/consul https://github.com/hashicorp/terraform-provider-consul v2.20.0
 hashicorp/dns https://github.com/hashicorp/terraform-provider-dns v3.4.1
 hashicorp/external https://github.com/hashicorp/terraform-provider-external v2.3.3
-hashicorp/google https://github.com/hashicorp/terraform-provider-google v5.34.0
+hashicorp/google https://github.com/hashicorp/terraform-provider-google v5.35.0
 hashicorp/googleworkspace https://github.com/hashicorp/terraform-provider-googleworkspace v0.7.0
 hashicorp/hcp https://github.com/hashicorp/terraform-provider-hcp v0.92.0
 hashicorp/hcs https://github.com/hashicorp/terraform-provider-hcs v0.5.1
