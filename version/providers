@@ -44,9 +44,9 @@ hashicorp/vault https://github.com/hashicorp/terraform-provider-vault v4.5.0
 heroku/heroku https://github.com/heroku/terraform-provider-heroku v5.2.8
 honeycombio/honeycombio https://github.com/honeycombio/terraform-provider-honeycombio v0.28.2
 integrations/github https://github.com/integrations/terraform-provider-github v6.4.0
-microsoft/azuredevops https://github.com/microsoft/terraform-provider-azuredevops 1.4.0
+microsoft/azuredevops https://github.com/microsoft/terraform-provider-azuredevops 1.5.0
 oracle/oci https://github.com/oracle/terraform-provider-oci v6.21.0
-PagerDuty/pagerduty https://github.com/PagerDuty/terraform-provider-pagerduty v3.18.2
+PagerDuty/pagerduty https://github.com/PagerDuty/terraform-provider-pagerduty v3.18.3
 splunk/splunk https://github.com/splunk/terraform-provider-splunk v1.4.29
 splunk/victorops https://github.com/splunk/terraform-provider-victorops v0.1.4
 terraform-provider-openstack/openstack https://github.com/terraform-provider-openstack/terraform-provider-openstack v3.0.0
