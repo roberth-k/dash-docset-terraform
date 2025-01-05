@@ -1,9 +1,9 @@
-aliyun/alicloud https://github.com/aliyun/terraform-provider-alicloud v1.239.0
+aliyun/alicloud https://github.com/aliyun/terraform-provider-alicloud v1.240.0
 auth0/auth0 https://github.com/auth0/terraform-provider-auth0 v1.9.1
-Azure/azapi https://github.com/Azure/terraform-provider-azapi v2.1.0
+Azure/azapi https://github.com/Azure/terraform-provider-azapi v2.2.0
 cloudflare/cloudflare https://github.com/cloudflare/terraform-provider-cloudflare v5.0.0-alpha1
 confluentinc/confluent https://github.com/confluentinc/terraform-provider-confluent v2.12.0
-databricks/databricks https://github.com/databricks/terraform-provider-databricks v1.62.0
+databricks/databricks https://github.com/databricks/terraform-provider-databricks v1.62.1
 DataDog/datadog https://github.com/DataDog/terraform-provider-datadog v3.50.0
 datadrivers/nexus https://github.com/datadrivers/terraform-provider-nexus v2.5.0
 digitalocean/digitalocean https://github.com/digitalocean/terraform-provider-digitalocean v2.46.1
