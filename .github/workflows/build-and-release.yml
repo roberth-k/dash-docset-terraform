@@ -32,7 +32,7 @@ jobs:
         with:
           name: Terraform.tgz
 
-      - uses: softprops/gh-release@v2
+      - uses: softprops/action-gh-release@v2
         with:
           files: Terraform.tgz
           tag_name: ${{ github.ref_name }}
