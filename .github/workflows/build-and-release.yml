@@ -8,15 +8,15 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.9'
       - run: make test/unit
       - run: make -j$(( $(nproc) + 1 ))
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: Terraform.tgz
           path: .build/latest/Terraform.tgz
@@ -24,42 +24,17 @@ jobs:
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     name: Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - build
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: Terraform.tgz
 
-      - name: create draft release
-        uses: actions/create-release@v1
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.CI_USER_ACCESS_TOKEN }}
+      - uses: softprops/action-gh-release@v2
         with:
+          files: Terraform.tgz
           tag_name: ${{ github.ref_name }}
-          release_name: ${{ github.ref_name }}
-          draft: true
-
-      - name: upload docset to release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.CI_USER_ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Terraform.tgz
-          asset_name: Terraform.tgz
-          asset_content_type: application/gzip
-
-      - name: publish release
-        env:
-          GITHUB_TOKEN: ${{ secrets.CI_USER_ACCESS_TOKEN }}
-        run: |
-          curl \
-            --show-error --fail -i \
-            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/${{ steps.create_release.outputs.id }}" \
-            -XPATCH \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${GITHUB_TOKEN}" \
-            -d '{"draft": false}'
+          name: ${{ github.ref_name }}
+          token: ${{ secrets.CI_USER_ACCESS_TOKEN }}
