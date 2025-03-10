@@ -14,11 +14,11 @@ jobs:
           persist-credentials: false
       - id: before-version-update
         name: get current version
-        run: 'echo ::set-output "name=version::$(cat version/docset)"'
+        run: 'echo "version=$(cat version/docset)" >> $GITHUB_OUTPUT'
       - run: make version/update
       - id: after-version-update
         name: get new version
-        run: 'echo ::set-output "name=version::$(cat version/docset)"'
+        run: 'echo "version=$(cat version/docset)" >> $GITHUB_OUTPUT'
       - name: push tag
         if: ${{ steps.before-version-update.outputs.version != steps.after-version-update.outputs.version }}
         run: |
