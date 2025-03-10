@@ -7,13 +7,13 @@ databricks/databricks https://github.com/databricks/terraform-provider-databrick
 DataDog/datadog https://github.com/DataDog/terraform-provider-datadog v3.57.0
 datadrivers/nexus https://github.com/datadrivers/terraform-provider-nexus v2.5.0
 digitalocean/digitalocean https://github.com/digitalocean/terraform-provider-digitalocean v2.49.1
-fastly/fastly https://github.com/fastly/terraform-provider-fastly v5.16.0
+fastly/fastly https://github.com/fastly/terraform-provider-fastly v5.17.0
 gitlabhq/gitlab https://github.com/gitlabhq/terraform-provider-gitlab v17.9.0
 grafana/grafana https://github.com/grafana/terraform-provider-grafana v3.21.0
 hashicorp/ad https://github.com/hashicorp/terraform-provider-ad v0.5.0
 hashicorp/archive https://github.com/hashicorp/terraform-provider-archive v2.7.0
 hashicorp/assert https://github.com/hashicorp/terraform-provider-assert v0.15.0
-hashicorp/aws https://github.com/hashicorp/terraform-provider-aws v5.90.0
+hashicorp/aws https://github.com/hashicorp/terraform-provider-aws v5.90.1
 hashicorp/awscc https://github.com/hashicorp/terraform-provider-awscc v1.32.0
 hashicorp/azuread https://github.com/hashicorp/terraform-provider-azuread v3.1.0
 hashicorp/azurerm https://github.com/hashicorp/terraform-provider-azurerm v4.22.0
