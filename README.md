@@ -25,12 +25,18 @@ The docset was developed using the following:
 - git
 - GNU Make
 - GNU Coreutils
-- Python 3.9
+- Python 3.11
 
 To build the docset, run:
 
 ```bash
 make docset
+```
+
+To build in a container, run:
+
+```bash
+make build
 ```
 
 The build will use the version of Terraform given in [version/terraform](version/terraform). All
