@@ -21,6 +21,7 @@ PROVIDER_FILTERS = [
     'Azure/azapi',
     'cloudflare/cloudflare',
     'confluentinc',
+    'Crowdstrike/crowdstrike',
     'databricks/databricks',
     'DataDog/datadog',
     'datadrivers/nexus',
