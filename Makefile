@@ -47,6 +47,14 @@ docset:
 
 ###
 
+.PHONY: build
+
+build:
+	docker build -t dash-docset-terraform:latest .
+	docker run --rm -v "$$(pwd):/workspace" -w /workspace dash-docset-terraform:latest docset
+
+###
+
 .PHONY: clean/all clean/src clean
 
 clean/all:

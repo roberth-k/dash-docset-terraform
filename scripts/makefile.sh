@@ -5,7 +5,7 @@ readonly srcdir=$1
 readonly dstdir=$2
 
 function emit_terraform_rules {
-    local terraform_docs_dir="$srcdir/terraform/website/docs"
+    local terraform_docs_dir="$srcdir/terraform/docs"
 
     find $terraform_docs_dir -type f -name '*.mdx' -print0 \
     | while read -d $'\0' input_file

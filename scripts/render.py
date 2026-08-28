@@ -150,6 +150,7 @@ class Page:
     body: str
     flavor: str
     output_file: str
+    input_file: str
     is_provider_index: bool
 
     @staticmethod
@@ -161,6 +162,7 @@ class Page:
             title_h1=soup.find_all('h1')[0].text if len(soup.find_all('h1')) > 0 else '',
             body=str(body),
             output_file=args.output_file,
+            input_file=args.input_file,
             flavor=args.flavor,
             is_provider_index=args.provider_relative_output_file == 'index.html' or args.provider_relative_output_file == '.',
         )
@@ -178,7 +180,7 @@ class Page:
                 return title
         elif self.flavor == 'provider':
             if self.is_data_source or self.is_resource:
-                resource_name = derive_resource_name(self.title_metadata, self.title_h1, self.output_file)
+                resource_name = derive_resource_name(self.title_metadata, self.title_h1, self.output_file, self.input_file)
 
                 if not resource_name:
                     raise RuntimeError(f'failed to derive resource name of {self.output_file}')
@@ -327,7 +329,7 @@ def update_hrefs(html: str, args: Args) -> str:
     return str(soup)
 
 
-def derive_resource_name(metadata_page_title: str, page_h1: str, output_file: str) -> Optional[str]:
+def derive_resource_name(metadata_page_title: str, page_h1: str, output_file: str, input_file: Optional[str] = None) -> Optional[str]:
     # todo -- bit of a hack
     output_path_components = output_file.split('/')
     if len(output_path_components) > 4 and output_path_components[-5] == 'google':
@@ -369,6 +371,16 @@ def derive_resource_name(metadata_page_title: str, page_h1: str, output_file: st
         if results:
             return results[0]
 
+    # Fallback: use input filename stem (e.g. Microsoft.Network_ipGroups.md) when output
+    # filename is truncated (e.g. Microsoft.html), as with some Azure azapi resource docs.
+    if input_file:
+        stem = basename(input_file).rsplit('.', 1)[0]
+        if stem:
+            return stem
+    # Last resort: output filename stem to avoid crashing
+    stem = basename(output_file).split('.')[0]
+    if stem:
+        return stem
     return None
 
 
